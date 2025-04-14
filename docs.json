@@ -18,15 +18,29 @@
             "group": "Get Started",
             "pages": [
               "introduction",
-              "quickstart"
+              "quickstart",
+              {
+                "group": "Use Cases",
+                "pages": [
+                  "use-cases/simple-tasks",
+                  "use-cases/data-entry",
+                  "use-cases/deep-research",
+                  "use-cases/multi-tab",
+                  "use-cases/report-generation",
+                  "use-cases/from-video"
+                ]
+              }
             ]
           },
           {
             "group": "Platform",
             "pages": [
               "platform/overview",
-              "platform/installation",
-              "platform/key-features"
+              "platform/doing-tasks",
+              "platform/doing-tasks-from-videos",
+              "platform/using-workflows",
+              "platform/uploading-documents",
+              "platform/managing-workspace"
             ]
           },
           {

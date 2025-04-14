@@ -10,7 +10,7 @@ This guide covers the initial steps required to install and configure the offici
 Install the SDK using pip:
 
 ```bash
-pip install curalabs
+pip install curalabs-agent
 ```
 
 ## Obtaining Credentials
@@ -25,7 +25,7 @@ Import the SDK and initialize it with your API Key, API Secret, and the backend 
 
 ```python
 import os
-from curalabs import cura # Replace with actual import if different
+from curalabs_agent import cura # Assuming 'cura' is the client object
 
 # It's recommended to load credentials from environment variables or a secure config
 api_key = os.environ.get("CURALABS_API_KEY")
