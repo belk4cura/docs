@@ -1,0 +1,47 @@
+---
+title: Python SDK Setup
+sidebar_title: SDK Setup
+---
+
+This guide covers the initial steps required to install and configure the official Python SDK before using it to interact with the Curalabs API.
+
+## Installation
+
+Install the SDK using pip:
+
+```bash
+pip install curalabs
+```
+
+## Obtaining Credentials
+
+Before using the SDK, you need an **API Key** and **API Secret**. Generate these credentials from the "Developer Settings" section of your dashboard.
+
+Refer to the [Managing API Keys](./managing-api-keys.md) guide for detailed steps on generating and handling your credentials securely.
+
+## Initialization
+
+Import the SDK and initialize it with your API Key, API Secret, and the backend URL (if different from default).
+
+```python
+import os
+from curalabs import cura # Replace with actual import if different
+
+# It's recommended to load credentials from environment variables or a secure config
+api_key = os.environ.get("CURALABS_API_KEY")
+api_secret = os.environ.get("CURALABS_API_SECRET")
+
+if not api_key or not api_secret:
+    raise ValueError("API Key and Secret must be set in environment variables (CURALABS_API_KEY, CURALABS_API_SECRET)")
+
+# Initialize the SDK client
+agent = cura(
+    api_key=api_key,
+    api_secret=api_secret
+    # You can optionally specify the base_url if not using the default production URL
+    # base_url="https://your-staging-api.curalabs.io/v1"
+)
+
+print("SDK initialized successfully.")
+```
+Once initialized, you can use the `agent` object to call SDK methods as described in the specific usage guides (e.g., [Managing Tasks](./tasks.md), [Managing Workflows](./workflows.md)).

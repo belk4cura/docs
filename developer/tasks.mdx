@@ -1,50 +1,15 @@
 ---
 title: Managing Tasks
 sidebar_title: Managing Tasks
-sidebar_position: 3
+sidebar_position: 4 # Adjusted position
 ---
 
-# Using the Python SDK
+This guide explains how to use the official Python SDK to initiate and manage browser automation tasks for your end-users.
 
-This guide explains how to install, configure, and use the official Python SDK to interact with our platform and control browser automation tasks for your end-users.
-
-We strongly recommend using the SDK as it handles authentication and API communication details for you.
-
-## Installation
-
-Install the SDK using pip:
-
-```bash
-pip install curalabs
-```
-
-## Obtaining Credentials
-
-Before using the SDK, you need an **API Key** and **API Secret**. Generate these credentials from the "Developer Settings" section of your dashboard.
-
-Refer to the [Managing API Keys](./managing-api-keys.md) guide for detailed steps on generating and handling your credentials securely.
-
-## Initialization
-
-Import the SDK and initialize it with your API Key, API Secret, and the backend URL (if different from default).
-
-```python
-import os
-from curalabs import cura # Replace with actual import if different
-
-# It's recommended to load credentials from environment variables or a secure config
-api_key = os.environ.get("CURALABS_API_KEY")
-api_secret = os.environ.get("CURALABS_API_SECRET")
-
-if not api_key or not api_secret:
-    raise ValueError("API Key and Secret must be set in environment variables (CURALABS_API_KEY, CURALABS_API_SECRET)")
-
-# Initialize the SDK client
-agent = cura(
-    api_key=api_key,
-    api_secret=api_secret
-)
-```
+**Prerequisites:** Before using the methods described here, ensure you have:
+1.  Followed the [Python SDK Setup](./sdk-setup.md) guide for installation and initialization.
+2.  Obtained your credentials as described in [Managing API Keys](./managing-api-keys.md).
+3.  Successfully initialized the `agent` object as shown in the SDK Setup guide.
 
 ## Starting an Automation Task
 

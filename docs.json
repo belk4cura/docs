@@ -9,11 +9,6 @@
     "dark": "#8A2BE2"
   },
   "favicon": "/favicon.svg",
-  "api": {
-    "examples": {
-      "languages": ["curl", "python", "javascript"]
-    }
-  },
   "navigation": {
     "tabs": [
       {
@@ -39,6 +34,7 @@
             "pages": [
               "developer/overview",
               "developer/managing-api-keys",
+              "developer/sdk-setup",
               "developer/tasks",
               "developer/workflows",
               "developer/video-to-workflow",
