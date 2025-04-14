@@ -55,6 +55,22 @@
               "api-reference/endpoint/create",
               "api-reference/endpoint/webhook"
             ]
+          },
+          {
+            "group": "Workflows",
+            "pages": [
+              "api-reference/endpoint/workflows-create",
+              "api-reference/endpoint/workflows-create-from-video",
+              "api-reference/endpoint/workflows-start",
+              "api-reference/endpoint/workflows-get-run-status",
+              "api-reference/endpoint/workflows-get-video-job-status"
+            ]
+          },
+          {
+            "group": "Documents",
+            "pages": [
+              "api-reference/endpoint/documents-upload"
+            ]
           }
         ]
       }

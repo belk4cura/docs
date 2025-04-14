@@ -15,6 +15,14 @@
     {
       "name": "Tasks",
       "description": "Operations related to automation tasks"
+    },
+    {
+      "name": "Workflows",
+      "description": "Operations related to workflow definitions and execution runs."
+    },
+    {
+      "name": "Documents",
+      "description": "Operations related to managing user documents."
     }
   ],
   "paths": {
@@ -132,6 +140,262 @@
         },
         "security": [ { "ApiKeyAuth": [] } ]
       }
+    },
+    "/workflows": {
+      "post": {
+        "tags": ["Workflows"],
+        "summary": "Create Workflow Definition",
+        "description": "Define a new reusable workflow as an ordered sequence of tasks.",
+        "operationId": "createWorkflow",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/WorkflowDefinitionRequest" }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created. Workflow definition successfully created.",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Workflow" }
+              }
+            }
+          },
+          "400": { "$ref": "#/components/responses/BadRequest" },
+          "401": { "$ref": "#/components/responses/Unauthorized" },
+          "403": { "$ref": "#/components/responses/Forbidden" },
+          "429": { "$ref": "#/components/responses/TooManyRequests" },
+          "500": { "$ref": "#/components/responses/InternalServerError" }
+        },
+        "security": [ { "ApiKeyAuth": [] } ]
+      }
+    },
+    "/workflows/from-video": {
+      "post": {
+        "tags": ["Workflows"],
+        "summary": "Create Workflow Definition from Video",
+        "description": "Upload a video file to automatically generate a workflow definition. This is an asynchronous process. Returns a job ID for polling the status.",
+        "operationId": "createWorkflowFromVideo",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "required": ["file", "developer_user_id"],
+                "properties": {
+                  "file": {
+                    "type": "string",
+                    "format": "binary",
+                    "description": "The video file to upload."
+                  },
+                  "developer_user_id": {
+                    "type": "string",
+                    "description": "Identifier for the end-user this workflow belongs to.",
+                     "example": "user-unique-id-in-your-system"
+                  },
+                  "workflow_name": {
+                    "type": "string",
+                    "description": "Optional user-friendly name for the generated workflow.",
+                    "example": "Workflow from MyScreenRecording.mp4"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "202": {
+            "description": "Accepted. The video processing job has been successfully queued.",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/VideoWorkflowProcessingJobStartResponse" }
+              }
+            }
+          },
+          "400": { "$ref": "#/components/responses/BadRequest" },
+          "401": { "$ref": "#/components/responses/Unauthorized" },
+          "403": { "$ref": "#/components/responses/Forbidden" },
+          "413": {
+             "description": "Payload Too Large. The uploaded file exceeds the size limit.",
+             "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Error" } } }
+           },
+          "429": { "$ref": "#/components/responses/TooManyRequests" },
+          "500": { "$ref": "#/components/responses/InternalServerError" }
+        },
+        "security": [ { "ApiKeyAuth": [] } ]
+      }
+    },
+    "/workflows/{workflow_id}/start": {
+      "post": {
+        "tags": ["Workflows"],
+        "summary": "Start Workflow Run",
+        "description": "Initiate an execution run of a defined workflow for a specific end-user.",
+        "operationId": "startWorkflowRun",
+        "parameters": [
+          {
+            "name": "workflow_id",
+            "in": "path",
+            "required": true,
+            "description": "The ID of the workflow definition to run.",
+            "schema": { "type": "string", "example": "wf_abc123def456" }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/WorkflowStartRequest" }
+            }
+          }
+        },
+        "responses": {
+          "202": {
+            "description": "Accepted. The workflow run has been successfully queued.",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/WorkflowStartResponse" }
+              }
+            }
+          },
+          "400": { "$ref": "#/components/responses/BadRequest" },
+          "401": { "$ref": "#/components/responses/Unauthorized" },
+          "403": { "$ref": "#/components/responses/Forbidden" },
+          "404": { "$ref": "#/components/responses/NotFound" },
+          "429": { "$ref": "#/components/responses/TooManyRequests" },
+          "500": { "$ref": "#/components/responses/InternalServerError" }
+        },
+        "security": [ { "ApiKeyAuth": [] } ]
+      }
+    },
+    "/workflow-runs/{run_id}": {
+      "get": {
+        "tags": ["Workflows"],
+        "summary": "Get Workflow Run Status",
+        "description": "Retrieve the current status, results, or errors for a specific workflow execution run.",
+        "operationId": "getWorkflowRunStatus",
+        "parameters": [
+          {
+            "name": "run_id",
+            "in": "path",
+            "required": true,
+            "description": "The ID of the workflow run to retrieve.",
+            "schema": { "type": "string", "example": "wfr_ghi789jkl012" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK. Current status and details of the workflow run.",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/WorkflowRun" }
+              }
+            }
+          },
+          "401": { "$ref": "#/components/responses/Unauthorized" },
+          "403": { "$ref": "#/components/responses/ForbiddenTaskId" },
+          "404": { "$ref": "#/components/responses/NotFound" },
+          "429": { "$ref": "#/components/responses/TooManyRequests" },
+          "500": { "$ref": "#/components/responses/InternalServerError" }
+        },
+        "security": [ { "ApiKeyAuth": [] } ]
+      }
+    },
+     "/workflow-processing-jobs/{job_id}": {
+        "get": {
+          "tags": ["Workflows"],
+          "summary": "Get Video-to-Workflow Processing Status",
+          "description": "Poll this endpoint to check the status of a video-to-workflow generation job using the job_id returned by the upload endpoint.",
+          "operationId": "getVideoWorkflowJobStatus",
+          "parameters": [
+            {
+              "name": "job_id",
+              "in": "path",
+              "required": true,
+              "description": "The ID of the video processing job.",
+              "schema": { "type": "string", "example": "vwp_abc123def456" }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "OK. Current status and details of the video processing job.",
+              "content": {
+                "application/json": {
+                  "schema": { "$ref": "#/components/schemas/VideoWorkflowProcessingJobStatus" }
+                }
+              }
+            },
+            "401": { "$ref": "#/components/responses/Unauthorized" },
+            "403": { "$ref": "#/components/responses/Forbidden" },
+            "404": { "$ref": "#/components/responses/NotFound" },
+            "429": { "$ref": "#/components/responses/TooManyRequests" },
+            "500": { "$ref": "#/components/responses/InternalServerError" }
+          },
+          "security": [ { "ApiKeyAuth": [] } ]
+        }
+      },
+    "/users/{developer_user_id}/documents": {
+      "post": {
+        "tags": ["Documents"],
+        "summary": "Upload Document for User",
+        "description": "Upload a document (PDF, Word, image, etc.) associated with a specific end-user. The system will use this document downstream.",
+        "operationId": "uploadUserDocument",
+        "parameters": [
+          {
+            "name": "developer_user_id",
+            "in": "path",
+            "required": true,
+            "description": "The unique identifier for the end-user this document belongs to.",
+            "schema": { "type": "string", "example": "user-unique-id-in-your-system" }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "required": ["file"],
+                "properties": {
+                  "file": {
+                    "type": "string",
+                    "format": "binary",
+                    "description": "The document file to upload."
+                  },
+                  "document_name": {
+                    "type": "string",
+                    "description": "Optional name for the document. If not provided, the original filename might be used.",
+                    "example": "Monthly Report Q1.pdf"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created. Document successfully uploaded.",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Document" }
+              }
+            }
+          },
+          "400": { "$ref": "#/components/responses/BadRequest" },
+          "401": { "$ref": "#/components/responses/Unauthorized" },
+          "403": { "$ref": "#/components/responses/Forbidden" },
+          "413": {
+             "description": "Payload Too Large. The uploaded file exceeds the size limit.",
+             "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Error" } } }
+           },
+          "429": { "$ref": "#/components/responses/TooManyRequests" },
+          "500": { "$ref": "#/components/responses/InternalServerError" }
+        },
+        "security": [ { "ApiKeyAuth": [] } ]
+      }
     }
   },
   "components": {
@@ -189,6 +453,212 @@
             "example": "2025-04-13T23:01:00Z"
           }
         }
+      },
+      "WorkflowTask": {
+        "type": "object",
+        "required": ["instructions"],
+        "properties": {
+          "instructions": {
+            "type": "string",
+            "description": "Natural language instruction for this step.",
+            "example": "Navigate to google.com and search for 'best AI assistants'."
+          },
+          "target_url": {
+            "type": "string",
+            "description": "Optional initial URL context for this step.",
+            "example": "https://google.com"
+          }
+        }
+      },
+      "WorkflowDefinitionRequest": {
+        "type": "object",
+        "required": ["name", "tasks"],
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "A user-friendly name for the workflow.",
+            "example": "Login and Check Email Subject"
+          },
+          "tasks": {
+            "type": "array",
+            "description": "An ordered sequence of tasks to execute.",
+            "items": { "$ref": "#/components/schemas/WorkflowTask" },
+            "minItems": 1
+          }
+        }
+      },
+      "Workflow": {
+        "type": "object",
+        "properties": {
+          "workflow_id": {
+            "type": "string",
+            "description": "Unique identifier for the workflow definition.",
+            "example": "wf_abc123def456"
+          },
+          "name": {
+            "type": "string",
+            "description": "Name of the workflow."
+          },
+          "tasks": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/WorkflowTask" }
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "ISO 8601 timestamp when the workflow definition was created."
+          }
+        }
+      },
+      "WorkflowStartRequest": {
+        "type": "object",
+        "required": ["developer_user_id"],
+        "properties": {
+          "developer_user_id": {
+            "type": "string",
+            "description": "Unique identifier for the end-user in your system whose extension should execute the workflow.",
+            "example": "user-unique-id-in-your-system"
+          }
+        }
+      },
+      "WorkflowStartResponse": {
+        "type": "object",
+        "properties": {
+          "run_id": {
+            "type": "string",
+            "description": "Unique identifier for this specific workflow execution run.",
+            "example": "wfr_ghi789jkl012"
+          },
+          "status": {
+            "type": "string",
+            "description": "Initial status of the workflow run.",
+            "example": "queued",
+            "enum": ["queued", "processing", "completed", "failed"]
+          }
+        }
+      },
+      "WorkflowRun": {
+        "type": "object",
+        "properties": {
+          "run_id": {
+            "type": "string",
+            "description": "Unique identifier for the workflow run.",
+            "example": "wfr_ghi789jkl012"
+          },
+          "workflow_id": {
+            "type": "string",
+            "description": "Identifier of the workflow definition being run.",
+            "example": "wf_abc123def456"
+          },
+          "developer_user_id": {
+            "type": "string",
+            "description": "Identifier for the end-user the workflow was run for."
+          },
+          "status": {
+            "type": "string",
+            "description": "Current status of the workflow run.",
+            "enum": ["queued", "processing", "completed", "failed"]
+          },
+          "result": {
+            "type": "object",
+            "nullable": true,
+            "description": "The final result object if the run completed successfully. Structure may vary.",
+             "additionalProperties": true
+          },
+          "error": {
+            "type": "string",
+            "nullable": true,
+            "description": "Error message if the run failed."
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "ISO 8601 timestamp when the run was initiated."
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "ISO 8601 timestamp when the run status was last updated."
+          }
+        }
+      },
+      "Document": {
+        "type": "object",
+        "properties": {
+          "document_id": {
+            "type": "string",
+            "description": "Unique identifier for the uploaded document.",
+            "example": "doc_mno345pqr678"
+          },
+          "developer_user_id": {
+             "type": "string",
+             "description": "Identifier for the end-user the document is associated with."
+          },
+          "filename": {
+            "type": "string",
+            "description": "Original filename of the uploaded document.",
+            "example": "report.pdf"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "ISO 8601 timestamp when the document was uploaded."
+          }
+        }
+      },
+      "VideoWorkflowProcessingJobStartResponse": {
+        "type": "object",
+        "properties": {
+            "job_id": {
+              "type": "string",
+              "description": "Unique identifier for tracking the video processing job.",
+              "example": "vwp_abc123def456"
+            },
+            "status": {
+              "type": "string",
+              "description": "Initial status of the processing job.",
+              "enum": ["queued", "processing"],
+              "example": "queued"
+            }
+         }
+      },
+      "VideoWorkflowProcessingJobStatus": {
+         "type": "object",
+         "properties": {
+            "job_id": {
+              "type": "string",
+              "description": "Unique identifier for the video processing job.",
+              "example": "vwp_abc123def456"
+            },
+            "status": {
+              "type": "string",
+              "description": "Current status of the processing job.",
+              "enum": ["queued", "processing", "completed", "failed"],
+              "example": "processing"
+            },
+            "workflow_id": {
+              "type": "string",
+              "nullable": true,
+              "description": "Identifier of the workflow definition created if status is 'completed'.",
+              "example": "wf_xyz789abc123"
+            },
+            "error": {
+              "type": "string",
+              "nullable": true,
+              "description": "Error message if the job failed.",
+              "example": "Video format not supported."
+            },
+            "created_at": {
+              "type": "string",
+              "format": "date-time",
+              "description": "ISO 8601 timestamp when the job was created."
+            },
+            "updated_at": {
+              "type": "string",
+              "format": "date-time",
+              "description": "ISO 8601 timestamp when the job was last updated."
+            }
+          }
       },
       "Error": {
         "type": "object",
