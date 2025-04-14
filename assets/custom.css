@@ -1,0 +1,26 @@
+/* Target the logo link in the navbar */
+/* Adjust the selector if necessary based on actual site structure */
+a[href="/"] {
+  display: flex; /* Arrange image and text */
+  align-items: center; /* Vertically center items */
+  text-decoration: none; /* Remove underline from link */
+  gap: 0.5rem; /* Add space between logo and text */
+}
+
+/* Add the text "Curalabs" after the logo image */
+a[href="/"]::after {
+  content: "Curalabs";
+  /* Explicitly set light mode color (thematic purple) */
+  color: #8A2BE2;
+  font-weight: 600; /* Make it slightly bold */
+  font-size: 1.1rem; /* Adjust size as needed */
+  /* Add any other desired styles */
+}
+
+/* Set text color to white in dark mode */
+.dark a[href="/"]::after {
+  color: #FFFFFF;
+}
+
+/* Optional: Hide the default site name if it's rendered separately */
+/* nav .site-name-class { display: none; } */
