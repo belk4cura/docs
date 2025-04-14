@@ -34,12 +34,17 @@
             "pages": [
               "developer/overview",
               "developer/managing-api-keys",
-              "developer/sdk-setup",
-              "developer/tasks",
-              "developer/workflows",
-              "developer/video-to-workflow",
-              "developer/documents",
-              "developer/advanced-sdk-patterns"
+              {
+                "group": "Python SDK",
+                "pages": [
+                  "developer/sdk-setup",
+                  "developer/tasks",
+                  "developer/workflows",
+                  "developer/video-to-workflow",
+                  "developer/documents",
+                  "developer/advanced-sdk-patterns"
+                ]
+              }
             ]
           }
         ]
