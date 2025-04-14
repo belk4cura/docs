@@ -1,0 +1,122 @@
+---
+title: Managing Workflows
+sidebar_title: Managing Workflows
+---
+
+# Managing Workflows via SDK
+
+This guide explains how to use the Python SDK to define, initiate, and monitor multi-step workflows. Ensure you have followed the [Installation](./tasks.md#installation), [Credentials](./tasks.md#obtaining-credentials), and [Initialization](./tasks.md#initialization) steps first.
+
+## Creating a Workflow Definition
+
+Define a reusable sequence of tasks that can be executed later.
+
+```python
+import os
+from curalabs import cura # Replace with actual import if different
+
+# Assume agent is initialized as shown in the Initialization section
+# agent = cura(...)
+
+workflow_tasks = [
+    {"instructions": "Navigate to gmail.com and log in."},
+    {"instructions": "Find the latest email from 'support@example.com'."},
+    {"instructions": "Extract the subject line."}
+]
+
+try:
+    workflow_def = agent.create_workflow(
+        name="Check Support Email Subject", # Required: A user-friendly name
+        tasks=workflow_tasks # Required: List of task steps (dictionaries with 'instructions' and optional 'target_url')
+    )
+
+    if workflow_def:
+        workflow_id = workflow_def.get('workflow_id')
+        print(f"Workflow definition created successfully with ID: {workflow_id}")
+        # Store workflow_id for later use
+    else:
+        print("Failed to create workflow definition.")
+
+except Exception as e:
+    print(f"An error occurred while creating the workflow definition: {e}")
+
+```
+
+The `create_workflow` method requires a `name` for the workflow and a list of `tasks`. Each task is a dictionary containing at least the `instructions` string. It can optionally include a `target_url`. On success, it returns a dictionary containing the details of the created workflow, including its unique `workflow_id`.
+
+## Starting a Workflow Run
+
+Initiate an execution run of a previously defined workflow for a specific end-user.
+
+```python
+workflow_id_to_run = "wf_..." # Replace with the actual workflow_id from create_workflow
+user_id = "user-unique-id-in-your-system-456" # Replace with the end-user's ID in your system
+
+try:
+    start_response = agent.start_workflow_run(
+        workflow_id=workflow_id_to_run, # Required: ID of the workflow to run
+        developer_user_id=user_id # Required: Your internal ID for the end-user
+    )
+
+    if start_response:
+        run_id = start_response.get('run_id')
+        print(f"Workflow run successfully queued with Run ID: {run_id}")
+        # Store run_id to check status later
+    else:
+        print("Failed to queue workflow run.")
+
+except Exception as e:
+    print(f"An error occurred while starting the workflow run: {e}")
+
+```
+
+The `start_workflow_run` method requires the `workflow_id` of the definition to execute and the `developer_user_id` of the target end-user. On success, it returns a dictionary containing the unique `run_id` for this specific execution and its initial `status` (usually 'queued').
+
+## Checking Workflow Run Status (Polling)
+
+Monitor the progress and retrieve the results of a specific workflow run using its `run_id`.
+
+```python
+import time
+
+run_id_to_check = "wfr_..." # Replace with the actual run_id obtained from start_workflow_run
+
+if run_id_to_check:
+    while True:
+        try:
+            status_info = agent.get_workflow_run_status(run_id_to_check) # Required: ID of the run
+
+            if not status_info:
+                print("Failed to get workflow run status.")
+                break
+
+            status = status_info.get('status')
+            print(f"Current workflow run status: {status}")
+
+            if status == 'completed':
+                print("Workflow run completed.")
+                print(f"Result: {status_info.get('result')}") # Result structure may vary
+                break
+            elif status == 'failed':
+                print("Workflow run failed.")
+                print(f"Error: {status_info.get('error')}")
+                break
+            elif status in ['queued', 'processing']:
+                # Wait before checking again
+                print("Workflow run still in progress, checking again in 10 seconds...")
+                time.sleep(10)
+            else:
+                print(f"Unknown status: {status}")
+                break
+
+        except Exception as e:
+            print(f"An error occurred while checking workflow run status: {e}")
+            break
+else:
+    print("No Run ID provided to check status.")
+
+```
+
+The `get_workflow_run_status` method requires the `run_id`. It returns a dictionary containing the run's current `status`, `result` (if completed, structure may vary), `error` (if failed), and other details like `workflow_id` and timestamps, or `None` on error.
+
+*(Note: Handling results via webhooks, similar to [tasks](./tasks.md#handling-results-via-webhooks-recommended), is also recommended for workflows to avoid polling. The webhook payload structure for workflow events would need to be defined and verified using `agent.verify_webhook`.)*

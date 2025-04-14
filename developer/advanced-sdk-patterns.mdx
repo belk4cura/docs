@@ -1,0 +1,93 @@
+---
+title: Advanced SDK Patterns
+sidebar_title: Advanced Patterns
+---
+
+# Advanced SDK Usage Patterns
+
+This guide explores more advanced ways to use the Python SDK, focusing on leveraging the `target_url` parameter and structuring multi-step workflows.
+
+## Using `target_url` for Initial Context
+
+Both the `start_task` method and individual steps within a `create_workflow` definition accept an optional `target_url` parameter.
+
+**Purpose:** `target_url` provides an *initial* web page context for the automation agent for that specific task or workflow step. Think of it as telling the agent, "Start your work for this step on this specific page." If omitted, the agent might start with a blank page or the user's currently active tab.
+
+**Agent Navigation:** The agent is not restricted to the `target_url`. The `instructions` you provide will guide the agent's subsequent actions, including navigating away from the `target_url`, clicking links, interacting with elements, and potentially visiting other sites entirely.
+
+### Example: Starting a Task on a Specific Page
+
+Use `target_url` to ensure a task begins directly on the relevant page, like a login screen.
+
+```python
+# In tasks.mdx
+try:
+    task_details = agent.start_task(
+        developer_user_id="user_1",
+        instructions="Log in with username 'dev_user' and password 'complex_password!', then go to the settings page.",
+        target_url="https://app.example.com/login" # Start directly on the login page
+    )
+    if task_details:
+        print(f"Task started: {task_details.get('task_id')}")
+except Exception as e:
+    print(f"Error starting task: {e}")
+```
+
+## Workflows with Multiple Steps and Context
+
+Workflows shine when you need to perform a sequence of actions, potentially across different websites or involving data transfer.
+
+**Implicit Context:** The agent maintains context between workflow steps based on the `instructions`. For example, if Step 1 instructs the agent to "copy the email address," Step 2 can often instruct it to "paste the email address" without needing to explicitly pass the data.
+
+**Using `target_url` in Workflow Steps:** You can provide a `target_url` for *each step* if you want to explicitly define the starting point for that phase of the workflow. This is useful when steps involve distinct websites or specific deep links.
+
+### Example: Data Transfer Between Sites
+
+This workflow copies a product price from one site and pastes it into a spreadsheet.
+
+```python
+# In workflows.mdx
+try:
+    tasks = [
+        {
+            "instructions": "Navigate to the product page for SKU 'XYZ-123' and copy the current price.",
+            "target_url": "https://shop.example.com/products" # Start on the product list/search
+        },
+        {
+            "instructions": "Open the 'Pricing Analysis' spreadsheet and paste the copied price into cell B5 for SKU 'XYZ-123'.",
+            "target_url": "https://docs.google.com/spreadsheets/d/YOUR_SHEET_ID/edit#gid=0" # Start directly on the sheet
+        }
+    ]
+    workflow_def = agent.create_workflow(name="Copy Price to Sheet", tasks=tasks)
+    if workflow_def:
+        print(f"Workflow created: {workflow_def.get('workflow_id')}")
+except Exception as e:
+    print(f"Error creating workflow: {e}")
+
+```
+Here, `target_url` directs the agent to the starting point for each distinct action (finding the product, accessing the specific spreadsheet). The agent handles copying the price in step 1 and using it in step 2 based on the instructions.
+
+### Example: Multi-Site Action Sequence
+
+This workflow finds an order tracking number on one site and inputs it on another.
+
+```python
+# In workflows.mdx
+try:
+    tasks = [
+        {
+            "instructions": "Log in and find the tracking number for the latest order (#98765). Copy it.",
+            "target_url": "https://mystore.example.com/orders" # Start on the orders page
+        },
+        {
+            "instructions": "Go to the shipping carrier's tracking page and paste the tracking number to check the status.",
+            "target_url": "https://tracking.exampleshipper.com/track" # Start on the tracking input page
+        }
+    ]
+    workflow_def = agent.create_workflow(name="Check Order Shipping Status", tasks=tasks)
+    if workflow_def:
+        print(f"Workflow created: {workflow_def.get('workflow_id')}")
+except Exception as e:
+    print(f"Error creating workflow: {e}")
+```
+Again, `target_url` provides the starting context for each step, while the instructions guide the agent's actions, including the implicit transfer of the "tracking number" context from Step 1 to Step 2.

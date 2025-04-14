@@ -1,0 +1,99 @@
+---
+title: Video-to-Workflow
+sidebar_title: Video-to-Workflow
+---
+
+# Creating Workflows from Video via SDK
+
+This guide explains how to use the Python SDK to upload a video for automatic workflow generation and check the processing status. Ensure you have followed the [Installation](./tasks.md#installation), [Credentials](./tasks.md#obtaining-credentials), and [Initialization](./tasks.md#initialization) steps first.
+
+This feature allows you to generate a workflow definition by providing a video recording of the desired actions. The processing happens asynchronously.
+
+## Uploading Video for Workflow Generation
+
+Upload a video file and associate it with an end-user to start the workflow generation process.
+
+```python
+import os
+from curalabs import cura # Replace with actual import if different
+
+# Assume agent is initialized as shown in the Initialization section
+# agent = cura(...)
+
+user_id = "user-unique-id-in-your-system-789" # Replace with the end-user's ID in your system
+video_file_path = "path/to/your/screen_recording.mp4" # Path to the video file on your system
+optional_workflow_name = "Workflow from Recording" # Optional: Provide a name
+
+try:
+    # Note: The SDK likely handles opening and sending the file content.
+    # Ensure the file path is correct and accessible.
+    job_details = agent.create_workflow_from_video(
+        developer_user_id=user_id, # Required: Your internal ID for the end-user
+        file_path=video_file_path, # Required: Path to the video file
+        workflow_name=optional_workflow_name # Optional: Name for the generated workflow
+    )
+
+    if job_details:
+        job_id = job_details.get('job_id')
+        print(f"Video upload accepted. Processing job started with ID: {job_id}")
+        # Store job_id to check status later
+    else:
+        print("Failed to start video processing job.")
+
+except FileNotFoundError:
+    print(f"Error: Video file not found at {video_file_path}")
+except Exception as e:
+    print(f"An error occurred while uploading the video: {e}")
+
+```
+
+The `create_workflow_from_video` method requires the `developer_user_id` and the `file_path` to the video. It's assumed the SDK handles reading the file content from the provided path. You can also provide an optional `workflow_name`. On success, it returns a dictionary containing the `job_id` for this processing task and its initial `status` (usually 'queued').
+
+## Checking Processing Job Status (Polling)
+
+Monitor the status of the asynchronous video-to-workflow generation job using the `job_id`.
+
+```python
+import time
+
+job_id_to_check = "vwp_..." # Replace with the actual job_id obtained previously
+
+if job_id_to_check:
+    while True:
+        try:
+            status_info = agent.get_video_workflow_job_status(job_id_to_check) # Required: ID of the job
+
+            if not status_info:
+                print("Failed to get video processing job status.")
+                break
+
+            status = status_info.get('status')
+            print(f"Current job status: {status}")
+
+            if status == 'completed':
+                print("Video processing completed.")
+                generated_workflow_id = status_info.get('workflow_id')
+                print(f"Generated Workflow ID: {generated_workflow_id}")
+                # You can now use this workflow_id to start runs
+                break
+            elif status == 'failed':
+                print("Video processing failed.")
+                print(f"Error: {status_info.get('error')}")
+                break
+            elif status in ['queued', 'processing']:
+                # Wait before checking again
+                print("Job still in progress, checking again in 15 seconds...")
+                time.sleep(15) # Processing might take longer
+            else:
+                print(f"Unknown status: {status}")
+                break
+
+        except Exception as e:
+            print(f"An error occurred while checking job status: {e}")
+            break
+else:
+    print("No Job ID provided to check status.")
+
+```
+
+The `get_video_workflow_job_status` method requires the `job_id`. It returns a dictionary containing the job's current `status`. If completed, it includes the `workflow_id` of the generated workflow definition. If failed, it includes an `error` message. It may also contain timestamps. Returns `None` on error.

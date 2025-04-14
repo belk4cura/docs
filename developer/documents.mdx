@@ -1,0 +1,51 @@
+---
+title: Managing Documents
+sidebar_title: Managing Documents
+---
+
+# Managing Documents via SDK
+
+This guide explains how to use the Python SDK to upload documents (PDF, Word, images, etc.) associated with specific end-users. Ensure you have followed the [Installation](./tasks.md#installation), [Credentials](./tasks.md#obtaining-credentials), and [Initialization](./tasks.md#initialization) steps first.
+
+Uploaded documents can be used downstream by the platform or automation tasks/workflows.
+
+## Uploading a Document
+
+Upload a file from your system and associate it with one of your end-users using their `developer_user_id`.
+
+```python
+import os
+from curalabs import cura # Replace with actual import if different
+
+# Assume agent is initialized as shown in the Initialization section
+# agent = cura(...)
+
+user_id = "user-unique-id-in-your-system-123" # Replace with the end-user's ID in your system
+document_file_path = "path/to/your/report.pdf" # Path to the document file on your system
+optional_document_name = "Q1 Report" # Optional: Provide a name, otherwise filename might be used
+
+try:
+    # Note: The SDK likely handles opening and sending the file content.
+    # Ensure the file path is correct and accessible.
+    doc_details = agent.upload_document(
+        developer_user_id=user_id, # Required: Your internal ID for the end-user
+        file_path=document_file_path, # Required: Path to the document file
+        document_name=optional_document_name # Optional: Name for the document
+    )
+
+    if doc_details:
+        document_id = doc_details.get('document_id')
+        filename = doc_details.get('filename')
+        print(f"Document '{filename}' uploaded successfully with ID: {document_id}")
+        # Store document_id if needed
+    else:
+        print("Failed to upload document.")
+
+except FileNotFoundError:
+    print(f"Error: Document file not found at {document_file_path}")
+except Exception as e:
+    print(f"An error occurred while uploading the document: {e}")
+
+```
+
+The `upload_document` method requires the `developer_user_id` and the `file_path` to the document. It's assumed the SDK handles reading the file content from the provided path. You can also provide an optional `document_name`. On success, it returns a dictionary containing details about the uploaded document, including its unique `document_id` and the stored `filename`.
