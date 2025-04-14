@@ -18,18 +18,18 @@
             "group": "Get Started",
             "pages": [
               "introduction",
-              "quickstart",
-              {
-                "group": "Use Cases",
-                "pages": [
-                  "use-cases/simple-tasks",
-                  "use-cases/data-entry",
-                  "use-cases/deep-research",
-                  "use-cases/multi-tab",
-                  "use-cases/report-generation",
-                  "use-cases/from-video"
-                ]
-              }
+              "quickstart"
+            ]
+          },
+          {
+            "group": "Use Cases",
+            "pages": [
+              "use-cases/simple-tasks",
+              "use-cases/data-entry",
+              "use-cases/deep-research",
+              "use-cases/multi-tab",
+              "use-cases/report-generation",
+              "use-cases/from-video"
             ]
           },
           {
