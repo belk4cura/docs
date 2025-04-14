@@ -177,3 +177,22 @@ def handle_webhook():
 # Remember to run your web server (e.g., app.run())
 ```
 Ensure your webhook endpoint is publicly accessible and configured correctly in your dashboard.
+
+## Troubleshooting (Documentation Environment)
+
+*Note: This section pertains to issues encountered while setting up the local documentation preview environment using the Mintlify CLI, not the Python SDK itself.*
+
+<AccordionGroup>
+  <Accordion title='Error: Could not load the "sharp" module using the darwin-arm64 runtime'>
+
+    This may be due to an outdated version of node. Try the following:
+    1. Remove the currently-installed version of mintlify: `npm remove -g mintlify`
+    2. Upgrade to Node v19 or higher.
+    3. Reinstall mintlify: `npm install -g mintlify`
+  </Accordion>
+
+  <Accordion title="Issue: Encountering an unknown error (Mintlify CLI)">
+
+    Solution: Go to the root of your device and delete the ~/.mintlify folder. Afterwards, run `mintlify dev` again.
+  </Accordion>
+</AccordionGroup>

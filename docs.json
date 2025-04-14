@@ -18,19 +18,23 @@
             "group": "Get Started",
             "pages": [
               "introduction",
-              "quickstart",
-              "development"
+              "quickstart"
             ]
           },
           {
-            "group": "Essentials",
+            "group": "Platform",
             "pages": [
-              "essentials/markdown",
-              "essentials/code",
-              "essentials/images",
-              "essentials/settings",
-              "essentials/navigation",
-              "essentials/reusable-snippets"
+              "platform/overview",
+              "platform/installation",
+              "platform/key-features"
+            ]
+          },
+          {
+            "group": "Developer",
+            "pages": [
+              "developer/overview",
+              "developer/python-sdk-usage",
+              "developer/managing-api-keys"
             ]
           }
         ]
@@ -39,16 +43,9 @@
         "tab": "API Reference",
         "groups": [
           {
-            "group": "API Documentation",
-            "pages": [
-              "developer/overview",
-              "developer/managing-api-keys",
-              "developer/python-sdk-usage"
-            ]
-          },
-          {
             "group": "Endpoints",
             "pages": [
+              "api-reference/introduction",
               "api-reference/endpoint/get",
               "api-reference/endpoint/create",
               "api-reference/endpoint/webhook"
