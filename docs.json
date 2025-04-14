@@ -1,11 +1,12 @@
 {
   "$schema": "https://mintlify.com/docs.json",
+  "openapi": "api-reference/openapi.json",
   "theme": "mint",
   "name": "Curalabs",
   "colors": {
     "primary": "#8A2BE2",
-    "light": "#07C983",
-    "dark": "#15803D"
+    "light": "#8A2BE2",
+    "dark": "#8A2BE2"
   },
   "favicon": "/favicon.svg",
   "navigation": {

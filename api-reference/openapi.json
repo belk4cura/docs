@@ -120,45 +120,7 @@
             "description": "OK. Current status and details of the task.",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/TaskStatus" },
-                "examples": {
-                  "inProgress": {
-                    "summary": "Task In Progress",
-                    "value": {
-                      "task_id": "tsk_abc123xyz789",
-                      "status": "processing",
-                      "result": null,
-                      "error": null,
-                      "created_at": "2025-04-13T23:00:00Z",
-                      "updated_at": "2025-04-13T23:01:00Z"
-                    }
-                  },
-                  "completed": {
-                    "summary": "Task Completed Successfully",
-                    "value": {
-                      "task_id": "tsk_abc123xyz789",
-                      "status": "completed",
-                      "result": {
-                        "summary": "Search performed, first result obtained.",
-                        "data": { "first_link": "https://example-ai-site.com" }
-                      },
-                      "error": null,
-                      "created_at": "2025-04-13T23:00:00Z",
-                      "updated_at": "2025-04-13T23:05:00Z"
-                    }
-                  },
-                  "failed": {
-                    "summary": "Task Failed",
-                    "value": {
-                      "task_id": "tsk_abc123xyz789",
-                      "status": "failed",
-                      "result": null,
-                      "error": "Extension connection lost during execution.",
-                      "created_at": "2025-04-13T23:00:00Z",
-                      "updated_at": "2025-04-13T23:02:00Z"
-                    }
-                  }
-                }
+                "schema": { "$ref": "#/components/schemas/TaskStatus" }
               }
             }
           },
@@ -169,49 +131,6 @@
           "500": { "$ref": "#/components/responses/InternalServerError" }
         },
         "security": [ { "ApiKeyAuth": [] } ]
-      }
-    }
-  },
-  "webhooks": {
-    "taskUpdate": {
-      "post": {
-        "summary": "Task Update Notification",
-        "description": "Notifies the configured webhook URL when a task status changes to 'completed' or 'failed'.",
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "event_type": {
-                    "type": "string",
-                    "description": "The type of event that occurred.",
-                    "enum": ["task.completed", "task.failed"],
-                    "example": "task.completed"
-                  },
-                  "data": { "$ref": "#/components/schemas/TaskStatus" }
-                }
-              },
-              "example": {
-                "event_type": "task.completed",
-                "data": {
-                  "task_id": "tsk_abc123xyz789",
-                  "status": "completed",
-                  "result": { "summary": "Task complete", "data": {} },
-                  "error": null,
-                  "created_at": "2025-04-13T23:00:00Z",
-                  "updated_at": "2025-04-13T23:05:00Z"
-                }
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "OK. Webhook received successfully. Your endpoint should respond quickly."
-          }
-        }
       }
     }
   },
