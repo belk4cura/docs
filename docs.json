@@ -1,9 +1,9 @@
 {
   "$schema": "https://mintlify.com/docs.json",
   "theme": "mint",
-  "name": "Mint Starter Kit",
+  "name": "Curalabs",
   "colors": {
-    "primary": "#16A34A",
+    "primary": "#8A2BE2",
     "light": "#07C983",
     "dark": "#15803D"
   },
@@ -40,7 +40,9 @@
           {
             "group": "API Documentation",
             "pages": [
-              "api-reference/introduction"
+              "developer/overview",
+              "developer/managing-api-keys",
+              "developer/python-sdk-usage"
             ]
           },
           {
@@ -48,7 +50,6 @@
             "pages": [
               "api-reference/endpoint/get",
               "api-reference/endpoint/create",
-              "api-reference/endpoint/delete",
               "api-reference/endpoint/webhook"
             ]
           }
@@ -56,23 +57,7 @@
       }
     ],
     "global": {
-      "anchors": [
-        {
-          "anchor": "Documentation",
-          "href": "https://mintlify.com/docs",
-          "icon": "book-open-cover"
-        },
-        {
-          "anchor": "Community",
-          "href": "https://mintlify.com/community",
-          "icon": "slack"
-        },
-        {
-          "anchor": "Blog",
-          "href": "https://mintlify.com/blog",
-          "icon": "newspaper"
-        }
-      ]
+      "anchors": []
     }
   },
   "logo": {

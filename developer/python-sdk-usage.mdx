@@ -1,0 +1,183 @@
+---
+title: Python SDK Usage Guide
+sidebar_position: 3
+---
+
+# Using the Python SDK
+
+This guide explains how to install, configure, and use the official Python SDK to interact with our platform and control browser automation tasks for your end-users.
+
+We strongly recommend using the SDK as it handles authentication and API communication details for you.
+
+## Installation
+
+Install the SDK using pip:
+
+```bash
+pip install your-sdk-name
+```
+*(Replace `your-sdk-name` with the actual package name on PyPI)*
+
+## Obtaining Credentials
+
+Before using the SDK, you need an **API Key** and **API Secret**. Generate these credentials from the "Developer Settings" section of your dashboard.
+
+Refer to the [Managing API Keys](./managing-api-keys.md) guide for detailed steps on generating and handling your credentials securely.
+
+## Initialization
+
+Import the SDK and initialize it with your API Key, API Secret, and the backend URL (if different from default).
+
+```python
+import os
+from your_sdk_name import YourSimplifiedSDK # Replace with actual import
+
+# It's recommended to load credentials from environment variables or a secure config
+api_key = os.environ.get("YOUR_API_KEY")
+api_secret = os.environ.get("YOUR_API_SECRET")
+backend_url = "https://api.yourdomain.com" # Replace with actual API base URL (without /v1)
+
+if not api_key or not api_secret:
+    raise ValueError("API Key and Secret must be set in environment variables (YOUR_API_KEY, YOUR_API_SECRET)")
+
+# Initialize the SDK client
+sdk = YourSimplifiedSDK(
+    api_key=api_key,
+    api_secret=api_secret,
+    backend_url=backend_url
+)
+```
+
+## Starting an Automation Task
+
+To initiate a browser automation task for one of your end-users, use the `start_task` method. You must provide the unique ID of the user within your system (`developer_user_id`) so our backend knows which user's extension to target.
+
+```python
+try:
+    task_details = sdk.start_task(
+        developer_user_id="user-unique-id-in-your-system-123", # Required: Your internal ID for the end-user
+        instructions="Log in to example.com with username 'testuser' and password 'password123', then navigate to the dashboard.", # Required: Instructions for the agent
+        target_url="https://example.com/login" # Optional: Starting URL
+    )
+
+    if task_details:
+        task_id = task_details.get('task_id')
+        print(f"Task successfully queued with ID: {task_id}")
+        # Store task_id to check status later
+    else:
+        print("Failed to queue task.")
+
+except Exception as e:
+    print(f"An error occurred while starting the task: {e}")
+
+```
+
+The `start_task` method returns a dictionary containing the `task_id` and the initial status (usually 'queued') if successful, or `None` on error.
+
+## Checking Task Status and Results (Polling)
+
+You can periodically check the status of a task using its `task_id` with the `get_task_status` method.
+
+```python
+import time
+
+task_id_to_check = "tsk_..." # Replace with the actual task ID obtained from start_task
+
+if task_id_to_check:
+    while True:
+        try:
+            status_info = sdk.get_task_status(task_id_to_check)
+
+            if not status_info:
+                print("Failed to get task status.")
+                break
+
+            status = status_info.get('status')
+            print(f"Current task status: {status}")
+
+            if status in ['completed', 'failed']:
+                print("Task finished.")
+                print(f"Result: {status_info.get('result')}")
+                print(f"Error: {status_info.get('error')}")
+                break
+            elif status in ['queued', 'processing']:
+                # Wait before checking again
+                print("Task still in progress, checking again in 10 seconds...")
+                time.sleep(10)
+            else:
+                print(f"Unknown status: {status}")
+                break
+
+        except Exception as e:
+            print(f"An error occurred while checking task status: {e}")
+            break
+else:
+    print("No task ID provided to check status.")
+
+```
+
+The `get_task_status` method returns a dictionary containing the task's current `status`, `result` (if completed), and `error` (if failed), or `None` on error.
+
+## Handling Results via Webhooks (Recommended)
+
+Polling can be inefficient. We recommend configuring a webhook endpoint in your dashboard settings. When a task completes or fails, our system will send a `POST` request to your webhook URL with the task details.
+
+Use the `verify_webhook` method in the SDK to securely verify that incoming webhook requests originated from our system before processing the payload.
+
+```python
+# Example using Flask framework - Adapt for your framework
+from flask import Flask, request, abort
+import json
+
+app = Flask(__name__)
+
+@app.route('/your-webhook-endpoint', methods=['POST']) # Replace with your actual endpoint
+def handle_webhook():
+    # Get signature and timestamp from headers (adjust header names if needed)
+    signature = request.headers.get('X-Webhook-Signature')
+    timestamp = request.headers.get('X-Webhook-Timestamp')
+
+    if not signature or not timestamp:
+         print("Missing signature or timestamp headers")
+         abort(400)
+
+    # Get the raw request body
+    request_body = request.get_data()
+
+    # Verify the signature using the SDK
+    is_valid = sdk.verify_webhook(
+        request_body=request_body,
+        signature_header=signature,
+        timestamp_header=timestamp
+    )
+
+    if not is_valid:
+        print("Invalid webhook signature.")
+        abort(403) # Forbidden
+
+    # Signature is valid, process the payload
+    try:
+        payload = json.loads(request_body)
+        print("Received valid webhook:")
+        print(json.dumps(payload, indent=2))
+
+        # Add your logic here to handle the event (e.g., update your database, notify user)
+        # event_type = payload.get('event_type')
+        # task_data = payload.get('data', {})
+        # task_id = task_data.get('task_id')
+        # status = task_data.get('status')
+        # result = task_data.get('result')
+        # error = task_data.get('error')
+
+    except json.JSONDecodeError:
+        print("Invalid JSON received in webhook body.")
+        abort(400)
+    except Exception as e:
+        print(f"Error processing webhook payload: {e}")
+        abort(500)
+
+    return "Webhook received successfully", 200
+
+# Remember to run your web server (e.g., app.run())
+```
+Ensure your webhook endpoint is publicly accessible and configured correctly in your dashboard.
