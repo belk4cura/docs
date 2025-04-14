@@ -54,7 +54,7 @@
                   "developer/sdk-setup",
                   "developer/tasks",
                   "developer/workflows",
-                  "developer/video-to-workflow",
+                  "developer/video-to-task",
                   "developer/documents",
                   "developer/advanced-sdk-patterns"
                 ]
@@ -73,10 +73,12 @@
             ]
           },
           {
-            "group": "Endpoints",
+            "group": "Tasks",
             "pages": [
               "api-reference/endpoint/get",
               "api-reference/endpoint/create",
+              "api-reference/endpoint/tasks-create-from-video",
+              "api-reference/endpoint/tasks-get-processing-job-status",
               "api-reference/endpoint/webhook"
             ]
           },
@@ -84,10 +86,8 @@
             "group": "Workflows",
             "pages": [
               "api-reference/endpoint/workflows-create",
-              "api-reference/endpoint/workflows-create-from-video",
               "api-reference/endpoint/workflows-start",
-              "api-reference/endpoint/workflows-get-run-status",
-              "api-reference/endpoint/workflows-get-video-job-status"
+              "api-reference/endpoint/workflows-get-run-status"
             ]
           },
           {

@@ -173,12 +173,12 @@
         "security": [ { "ApiKeyAuth": [] } ]
       }
     },
-    "/workflows/from-video": {
+    "/tasks/from-video": {
       "post": {
-        "tags": ["Workflows"],
-        "summary": "Create Workflow Definition from Video",
-        "description": "Upload a video file to automatically generate a workflow definition. This is an asynchronous process. Returns a job ID for polling the status.",
-        "operationId": "createWorkflowFromVideo",
+        "tags": ["Tasks"],
+        "summary": "Create Task/Workflow Definition from Video",
+        "description": "Upload a video file to automatically generate a workflow definition based on the observed actions. This is an asynchronous process. Returns a job ID for polling the status.",
+        "operationId": "createTaskFromVideo",
         "requestBody": {
           "required": true,
           "content": {
@@ -200,7 +200,7 @@
                   "workflow_name": {
                     "type": "string",
                     "description": "Optional user-friendly name for the generated workflow.",
-                    "example": "Workflow from MyScreenRecording.mp4"
+                    "example": "Task from MyScreenRecording.mp4"
                   }
                 }
               }
@@ -212,7 +212,7 @@
             "description": "Accepted. The video processing job has been successfully queued.",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/VideoWorkflowProcessingJobStartResponse" }
+                "schema": { "$ref": "#/components/schemas/TaskProcessingJobStartResponse" }
               }
             }
           },
@@ -304,12 +304,12 @@
         "security": [ { "ApiKeyAuth": [] } ]
       }
     },
-     "/workflow-processing-jobs/{job_id}": {
+     "/task-processing-jobs/{job_id}": {
         "get": {
-          "tags": ["Workflows"],
-          "summary": "Get Video-to-Workflow Processing Status",
-          "description": "Poll this endpoint to check the status of a video-to-workflow generation job using the job_id returned by the upload endpoint.",
-          "operationId": "getVideoWorkflowJobStatus",
+          "tags": ["Tasks"],
+          "summary": "Get Video-to-Task Processing Status",
+          "description": "Poll this endpoint to check the status of a video-to-task generation job using the job_id returned by the upload endpoint.",
+          "operationId": "getTaskProcessingJobStatus",
           "parameters": [
             {
               "name": "job_id",
@@ -321,12 +321,12 @@
           ],
           "responses": {
             "200": {
-              "description": "OK. Current status and details of the video processing job.",
-              "content": {
-                "application/json": {
-                  "schema": { "$ref": "#/components/schemas/VideoWorkflowProcessingJobStatus" }
-                }
+            "description": "OK. Current status and details of the video processing job.",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/TaskProcessingJobStatus" }
               }
+            }
             },
             "401": { "$ref": "#/components/responses/Unauthorized" },
             "403": { "$ref": "#/components/responses/Forbidden" },
@@ -606,7 +606,7 @@
           }
         }
       },
-      "VideoWorkflowProcessingJobStartResponse": {
+      "TaskProcessingJobStartResponse": {
         "type": "object",
         "properties": {
             "job_id": {
@@ -622,7 +622,7 @@
             }
          }
       },
-      "VideoWorkflowProcessingJobStatus": {
+      "TaskProcessingJobStatus": {
          "type": "object",
          "properties": {
             "job_id": {
