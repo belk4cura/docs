@@ -7,7 +7,7 @@
   },
   "servers": [
     {
-      "url": "https://api.yourdomain.com/v1",
+      "url": "https://api.curalabs.io/v1",
       "description": "Production Server"
     }
   ],

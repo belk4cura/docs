@@ -14,9 +14,8 @@ We strongly recommend using the SDK as it handles authentication and API communi
 Install the SDK using pip:
 
 ```bash
-pip install your-sdk-name
+pip install curalabs
 ```
-*(Replace `your-sdk-name` with the actual package name on PyPI)*
 
 ## Obtaining Credentials
 
@@ -30,21 +29,19 @@ Import the SDK and initialize it with your API Key, API Secret, and the backend 
 
 ```python
 import os
-from your_sdk_name import YourSimplifiedSDK # Replace with actual import
+from curalabs import cura # Replace with actual import if different
 
 # It's recommended to load credentials from environment variables or a secure config
-api_key = os.environ.get("YOUR_API_KEY")
-api_secret = os.environ.get("YOUR_API_SECRET")
-backend_url = "https://api.yourdomain.com" # Replace with actual API base URL (without /v1)
+api_key = os.environ.get("CURALABS_API_KEY")
+api_secret = os.environ.get("CURALABS_API_SECRET")
 
 if not api_key or not api_secret:
-    raise ValueError("API Key and Secret must be set in environment variables (YOUR_API_KEY, YOUR_API_SECRET)")
+    raise ValueError("API Key and Secret must be set in environment variables (CURALABS_API_KEY, CURALABS_API_SECRET)")
 
 # Initialize the SDK client
-sdk = YourSimplifiedSDK(
+agent = cura(
     api_key=api_key,
-    api_secret=api_secret,
-    backend_url=backend_url
+    api_secret=api_secret
 )
 ```
 
@@ -54,10 +51,9 @@ To initiate a browser automation task for one of your end-users, use the `start_
 
 ```python
 try:
-    task_details = sdk.start_task(
+    task_details = agent.start_task(
         developer_user_id="user-unique-id-in-your-system-123", # Required: Your internal ID for the end-user
-        instructions="Log in to example.com with username 'testuser' and password 'password123', then navigate to the dashboard.", # Required: Instructions for the agent
-        target_url="https://example.com/login" # Optional: Starting URL
+        instructions="Log in to example.com with username 'testuser' and password 'password123', then navigate to the dashboard." # Required: Instructions for the agent
     )
 
     if task_details:
@@ -86,7 +82,7 @@ task_id_to_check = "tsk_..." # Replace with the actual task ID obtained from sta
 if task_id_to_check:
     while True:
         try:
-            status_info = sdk.get_task_status(task_id_to_check)
+            status_info = agent.get_task_status(task_id_to_check)
 
             if not status_info:
                 print("Failed to get task status.")
@@ -145,7 +141,7 @@ def handle_webhook():
     request_body = request.get_data()
 
     # Verify the signature using the SDK
-    is_valid = sdk.verify_webhook(
+    is_valid = agent.verify_webhook(
         request_body=request_body,
         signature_header=signature,
         timestamp_header=timestamp

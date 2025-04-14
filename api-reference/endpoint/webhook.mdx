@@ -1,4 +1,54 @@
 ---
-title: 'Task Update Notification'
-openapi: 'webhook taskUpdate'
+title: 'Task Update Notification (Webhook)'
 ---
+
+
+This webhook notifies your configured URL when a task status changes to 'completed' or 'failed'. Your endpoint should receive a `POST` request with a JSON body.
+
+**Important:** Security is handled via `X-Webhook-Timestamp` and `X-Webhook-Signature` headers, which must be verified by the webhook receiver using the API Secret. Refer to the SDK documentation for details on verification.
+
+## Request Body
+
+The `POST` request will contain a JSON body with the following structure:
+
+```json
+{
+  "event_type": "task.completed | task.failed",
+  "data": {
+    // TaskStatus Object
+  }
+}
+```
+
+### Properties
+
+*   **`event_type`** (string, required): The type of event that occurred.
+    *   Enum: `"task.completed"`, `"task.failed"`
+    *   Example: `"task.completed"`
+*   **`data`** (object, required): An object containing the details of the task status. This matches the `TaskStatus` schema defined in the main OpenAPI specification. See the [Get Task Status](./get.mdx) endpoint documentation for the `TaskStatus` schema details.
+
+### Example Payload (`task.completed`)
+
+```json
+{
+  "event_type": "task.completed",
+  "data": {
+    "task_id": "tsk_abc123xyz789",
+    "status": "completed",
+    "result": {
+      "summary": "Task complete",
+      "data": {}
+     },
+    "error": null,
+    "created_at": "2025-04-13T23:00:00Z",
+    "updated_at": "2025-04-13T23:05:00Z"
+  }
+}
+```
+
+## Responses
+
+Your webhook endpoint should respond quickly with an HTTP `200 OK` status code to acknowledge successful receipt of the webhook. Any other status code may be interpreted as a failure by our system.
+
+```
+HTTP/1.1 200 OK
