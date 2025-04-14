@@ -43,9 +43,14 @@
         "tab": "API Reference",
         "groups": [
           {
+            "group": "API Documentation",
+            "pages": [
+              "api-reference/introduction"
+            ]
+          },
+          {
             "group": "Endpoints",
             "pages": [
-              "api-reference/introduction",
               "api-reference/endpoint/get",
               "api-reference/endpoint/create",
               "api-reference/endpoint/webhook"
@@ -66,20 +71,18 @@
     "links": [
       {
         "label": "Support",
-        "href": "mailto:hi@mintlify.com"
+        "href": "mailto:admin@curalabs.io?subject=Support Request"
       }
     ],
     "primary": {
       "type": "button",
       "label": "Dashboard",
-      "href": "https://dashboard.mintlify.com"
+      "href": "https://curalabs.io/dashboard/credits"
     }
   },
   "footer": {
     "socials": {
-      "x": "https://x.com/mintlify",
-      "github": "https://github.com/mintlify",
-      "linkedin": "https://linkedin.com/company/mintlify"
+      "linkedin": "https://www.linkedin.com/company/curalabs"
     }
   }
 }
