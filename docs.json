@@ -18,9 +18,7 @@
             "group": "Get Started",
             "pages": [
               "introduction",
-              "quickstart",
-              "activity",
-              "credits"
+              "quickstart"
             ]
           },
           {
@@ -31,7 +29,29 @@
                   "use-cases/deep-research",
                   "use-cases/multi-site",
                   "use-cases/report-generation",
-                  "use-cases/from-video"
+                  "use-cases/from-video",
+              {
+                "group": "Industry Examples",
+                "pages": [
+                  "use-cases/industry/automotive",
+                  "use-cases/industry/ecommerce",
+                  "use-cases/industry/education",
+                  "use-cases/industry/energy",
+                  "use-cases/industry/finance",
+                  "use-cases/industry/government",
+                  "use-cases/industry/healthcare",
+                  "use-cases/industry/hr",
+                  "use-cases/industry/insurance",
+                  "use-cases/industry/legal",
+                  "use-cases/industry/logistics",
+                  "use-cases/industry/manufacturing",
+                  "use-cases/industry/mortgage",
+                  "use-cases/industry/real-estate",
+                  "use-cases/industry/retail",
+                  "use-cases/industry/telecommunications",
+                  "use-cases/industry/travel"
+                ]
+              }
             ]
           },
           {
@@ -42,7 +62,10 @@
               "platform/doing-tasks-from-videos",
               "platform/using-workflows",
               "platform/uploading-documents",
-              "platform/managing-workspace"
+              "platform/managing-workspace",
+              "platform/activity",
+              "platform/credits",
+              "platform/security"
             ]
           },
           {
