@@ -24,3 +24,28 @@ a[href="/"]::after {
 
 /* Optional: Hide the default site name if it's rendered separately */
 /* nav .site-name-class { display: none; } */
+
+/* Attempt to round corners of images inside Frame within Steps */
+/* Target img within figure (likely Frame render) or directly in a div */
+.prose div[role="listitem"] figure img,
+.prose div[role="listitem"] div > img {
+  border-radius: 20px !important; /* Increased radius, forced */
+  overflow: hidden !important;   /* Forced */
+  display: block;
+  width: 100%; /* Ensure image fills container if Frame adds one */
+  height: auto;
+}
+
+/* Optional: Reset Frame default styles if they interfere */
+.prose div[role="listitem"] figure {
+  margin: 1em 0; /* Restore some margin */
+  padding: 0;
+  border: none;
+  background: none;
+  box-shadow: none;
+}
+
+/* Remove custom wrapper styles if they exist */
+.image-frame-wrapper {
+  all: unset;
+}
