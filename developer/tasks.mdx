@@ -32,9 +32,31 @@ try:
 except Exception as e:
     print(f"An error occurred while starting the task: {e}")
 
+```python
+try:
+    task_details = agent.start_task(
+        developer_user_id="user-unique-id-in-your-system-123", # Required: Your internal ID for the end-user
+        instructions="Log in to example.com with username 'testuser' and password 'password123', then navigate to the dashboard." # Required: Instructions for the agent
+        # target_url="https://example.com/login" # Optional: Specify a starting URL
+    )
+
+    if task_details:
+        task_id = task_details.get('task_id')
+        print(f"Task successfully queued with ID: {task_id}")
+        # Store task_id to check status later
+    else:
+        print("Failed to queue task.")
+
+except Exception as e:
+    print(f"An error occurred while starting the task: {e}")
+
 ```
 
-The `start_task` method returns a dictionary containing the `task_id` and the initial status (usually 'queued') if successful, or `None` on error.
+The `start_task` method returns a dictionary containing the `task_id` and the initial status (usually 'queued') if successful, or `None` on error. It accepts the required `developer_user_id` and `instructions`.
+
+It also accepts an **optional** `target_url` parameter (string or list of strings) to specify an exact starting page(s). If `target_url` is omitted, the agent will navigate based solely on the description provided in the `instructions`.
+
+*For details on using `target_url` (including multiple URLs) versus instruction-based navigation, see [Advanced SDK Patterns: Using target_url](./advanced-sdk-patterns.md#using-targeturl-for-initial-context-optional).*
 
 ## Checking Task Status and Results (Polling)
 

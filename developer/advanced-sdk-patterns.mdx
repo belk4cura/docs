@@ -5,17 +5,28 @@ sidebar_title: Advanced Patterns
 
 This guide explores more advanced ways to use the Python SDK, focusing on leveraging the `target_url` parameter and structuring multi-step workflows.
 
-## Using `target_url` for Initial Context
+## Using `target_url` for Initial Context (Optional)
 
-Both the `start_task` method and individual steps within a `create_workflow` definition accept an optional `target_url` parameter.
+Both the `start_task` method and individual steps within a `create_workflow` definition accept an **optional** `target_url` parameter (either a single string URL or a list of string URLs).
 
-**Purpose:** `target_url` provides an *initial* web page context for the automation agent for that specific task or workflow step. Think of it as telling the agent, "Start your work for this step on this specific page." If omitted, the agent might start with a blank page or the user's currently active tab.
+**Purpose:** When provided, `target_url` gives the automation agent a specific web page (or pages) to load as the *initial* context for that task or workflow step. Think of it as telling the agent, "Start your work on this exact page."
 
-**Agent Navigation:** The agent is not restricted to the `target_url`. The `instructions` you provide will guide the agent's subsequent actions, including navigating away from the `target_url`, clicking links, interacting with elements, and potentially visiting other sites entirely.
+**Agent Navigation:** The agent is not restricted to the `target_url`. The `instructions` you provide will always guide the agent's subsequent actions, including navigating away from the `target_url`, clicking links, interacting with elements, and visiting other sites.
 
-### Example: Starting a Task on a Specific Page
+**Alternative: Instruction-Based Navigation:**
 
-Use `target_url` to ensure a task begins directly on the relevant page, like a login screen.
+If you **omit** the `target_url` parameter, the agent relies entirely on your `instructions` to determine where to navigate first. You can provide natural language descriptions of the destination.
+
+*   **Example Instructions (without `target_url`):**
+    *   `"Go to google.com and search for the latest news about AI."`
+    *   `"Navigate to our company's internal dashboard login page, then sign in."`
+    *   `"Open Example CRM and find the contact record for 'John Doe'."`
+
+The agent will attempt to interpret these instructions and navigate accordingly. Providing a `target_url` is generally more reliable for ensuring the agent starts exactly where you intend, but instruction-based navigation offers flexibility when a precise starting URL is unknown or unnecessary.
+
+### Example: Starting a Task on a Specific Page (Using `target_url`)
+
+Use `target_url` for reliability when you know the exact starting point, like a specific login page.
 
 ```python
 # In tasks.mdx
@@ -30,6 +41,143 @@ try:
 except Exception as e:
     print(f"Error starting task: {e}")
 ```
+
+### Example: Starting a Task with Instruction-Based Navigation (No `target_url`)
+
+Rely on instructions when the starting point is general or can be described.
+
+```python
+try:
+    task_details = agent.start_task(
+        developer_user_id="user_2",
+        instructions="Go to the main login page for ExampleApp, enter username 'test_user' and password 'pw123', and click Sign In."
+        # No target_url provided - agent navigates based on instructions
+    )
+    if task_details:
+        print(f"Instruction-based task started: {task_details.get('task_id')}")
+except Exception as e:
+    print(f"Error starting instruction-based task: {e}")
+
+```
+
+
+### Advanced Usage: Providing Multiple `target_url`s
+
+For more complex scenarios, `target_url` can also accept a **list of strings** (URLs). This instructs the agent to open multiple tabs, one for each URL provided, at the start of the task or workflow step.
+
+**Use Cases:**
+
+*   **Comparative Analysis:** Open multiple product pages on different e-commerce sites simultaneously to compare prices or features within a single task.
+*   **Multi-Source Data Gathering:** Open several specific report pages or dashboards to collect related data points efficiently in one go.
+*   **Cross-System Interaction:** Initiate actions on multiple related web applications or systems within a single task or workflow step (e.g., checking order status across e-commerce, shipping, and payment systems simultaneously).
+
+**Important Note:** While multiple tabs are opened upfront using a list of `target_url`s, the agent typically processes the `instructions` sequentially, acting on one tab then the next as directed. This isn't true parallel processing in terms of simultaneous *execution* of complex logic, but rather concurrent *access* to multiple systems within a single automated process. You need to structure your instructions clearly to guide the agent's interaction across the different tabs (e.g., "On the first tab (Site A), find X. On the second tab (Site B), find Y. Report both.").
+
+**Example: `start_task` with Multiple URLs**
+
+```python
+# Compare product price across multiple vendor sites
+try:
+    task_details = agent.start_task(
+        developer_user_id="user_compare_1",
+        instructions="For product 'Gadget Pro', find the price on site A (first tab) and site B (second tab). Report which site has the lower price.",
+        target_url=[
+            "https://siteA.com/products/gadget-pro",
+            "https://siteB.com/catalog?search=Gadget+Pro"
+        ]
+    )
+    if task_details:
+        print(f"Comparison task started: {task_details.get('task_id')}")
+except Exception as e:
+    print(f"Error starting comparison task: {e}")
+```
+
+**Example: Workflow Step with Multiple URLs**
+
+```python
+# Workflow step to gather data from two dashboards
+try:
+    tasks = [
+        {
+            "instructions": "Log in to the main portal.", # Assume login provides access to both dashboards below
+            "target_url": "https://portal.example.com/login"
+        },
+        {
+            "instructions": "In the first tab (Sales Dashboard), find the 'Total Revenue YTD'. In the second tab (Marketing Dashboard), find the 'New Leads This Month'. Record both values.",
+            "target_url": [
+                 "https://portal.example.com/dashboards/sales", # Dashboard 1
+                 "https://portal.example.com/dashboards/marketing" # Dashboard 2
+             ]
+        },
+        {
+            "instructions": "Summarize the recorded values."
+            # No target_url needed, continues from previous context
+        }
+    ]
+    workflow_def = agent.create_workflow(name="Gather Multi-Dashboard KPIs", tasks=tasks)
+    if workflow_def:
+        print(f"Multi-dashboard workflow created: {workflow_def.get('workflow_id')}")
+except Exception as e:
+    print(f"Error creating workflow: {e}")
+```
+
+**Example: Competitor Price Monitoring**
+
+Use a list of `target_url`s to open multiple competitor product pages and extract prices for comparison.
+
+```python
+# List of competitor product page URLs to monitor
+competitor_urls = [
+    "https://competitorA.com/product/widget-model-x",
+    "https://competitorB.com/widget-x",
+    "https://competitorC.com/products/widget_x_special"
+]
+
+try:
+    task_details = agent.start_task(
+        developer_user_id="pricing_analyst_1",
+        instructions="For each open tab, find the main price displayed for the 'Widget Model X'. Record the website URL and the price found.",
+        target_url=competitor_urls # Provide the list of URLs
+    )
+    if task_details:
+        print(f"Competitor price monitoring task started: {task_details.get('task_id')}")
+        # The task result should contain the list of URLs and their extracted prices.
+except Exception as e:
+    print(f"Error starting price monitoring task: {e}")
+```
+This task can be scheduled to run periodically to keep track of competitor pricing adjustments.
+
+**Example: Cross-System Status Monitoring**
+
+Check the status of an order across multiple systems (e-commerce, shipping, payment) in a single task.
+
+```python
+# URLs for checking a specific order across different systems
+order_check_urls = [
+    "https://my-ecommerce-store.com/orders/status/12345", # Store order details
+    "https://shipping-carrier.com/track?id=ABCXYZ",      # Carrier tracking info
+    "https://payment-gateway.com/transactions/lookup"     # Payment status page (may require login)
+]
+
+try:
+    task_details = agent.start_task(
+        developer_user_id="support_agent_1",
+        instructions="""
+        1. In the first tab (Store Order Status), record the current 'Order Status' (e.g., Shipped, Processing).
+        2. In the second tab (Shipping Tracking), record the latest 'Tracking Event' (e.g., In Transit, Delivered).
+        3. In the third tab (Payment Gateway), log in if needed and verify the 'Transaction Status' is 'Completed'.
+        4. Report the statuses found from all three systems.
+        """,
+        target_url=order_check_urls # Open all relevant pages at once
+    )
+    if task_details:
+        print(f"Cross-system order check task started: {task_details.get('task_id')}")
+        # Task result should contain the consolidated status information
+except Exception as e:
+    print(f"Error starting order check task: {e}")
+```
+This efficiently gathers information from multiple sources without requiring separate tasks or manual intervention for each system.
+
 
 ## Workflows with Multiple Steps and Context
 

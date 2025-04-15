@@ -1,0 +1,90 @@
+---
+title: Using Documents in Automation
+sidebar_title: Using Documents
+---
+
+This guide explains how to leverage pre-uploaded documents within your automation tasks and workflows by referencing their unique `document_id`.
+
+**Prerequisites:**
+
+1.  Understanding how to upload documents and obtain their `document_id` using `agent.upload_document` as described in [Managing Documents](./documents.md).
+2.  Familiarity with creating [Tasks](./tasks.md) or defining [Workflows](./workflows.md).
+
+## Concept: Referencing `document_id` in Instructions
+
+The core idea is to embed the `document_id` (obtained when uploading a file) directly into the `instructions` you provide for a task or a workflow step. This tells the automation agent to access and utilize the content of that specific document as part of its execution.
+
+**How it Works (Conceptual):**
+
+The agent needs to be capable of understanding instructions that reference document IDs. You construct your instructions to guide the agent, for example:
+
+*   "Using the resume **(ID: doc_resume_123)** and cover letter **(ID: doc_cover_456)**, complete the job application at the target URL."
+*   "Referencing the financial report **(ID: doc_q1_report)**, extract the 'Total Revenue' figure and enter it into the spreadsheet."
+*   "Open the contract **(ID: doc_contract_abc)** and find the section detailing payment terms."
+
+The exact phrasing depends on the agent's natural language processing capabilities. The key is providing the `document_id` as a clear identifier within the context of the instruction, enabling the agent to retrieve and use the correct file.
+
+## Use Case 1: Submitting Job Applications
+
+Upload a candidate's resume and cover letter, then use a task or workflow to automatically fill out online job applications using the content from those documents.
+
+```python
+# Assume resume_id = "doc_resume_123" and cover_letter_id = "doc_cover_456"
+# were obtained from previous agent.upload_document calls.
+# Assume job_application_url = "https://careers.example.com/apply?jobId=XYZ"
+
+try:
+    task_details = agent.start_task(
+        developer_user_id="candidate_user_1",
+        instructions=f"Go to the job application page ({job_application_url}). Fill out the form accurately using the information found in the attached resume (ID: {resume_id}) and cover letter (ID: {cover_letter_id}). Where the application asks for file uploads, use the resume file (ID: {resume_id}) and cover letter file (ID: {cover_letter_id}). Review and submit the application.",
+        # target_url is implicitly the job_application_url mentioned in instructions,
+        # but could also be set explicitly for clarity.
+        # target_url=job_application_url
+    )
+    if task_details:
+        print(f"Job application task started: {task_details.get('task_id')}")
+except Exception as e:
+    print(f"Error starting job application task: {e}")
+```
+**Value:** Automates the repetitive process of filling application forms, ensuring consistency by using the provided documents as the source of truth.
+
+## Use Case 2: Financial Data Aggregation (Workflow)
+
+Upload monthly bank statements (e.g., PDFs) and create a workflow to extract key figures, compiling them into a summary.
+
+```python
+# Assume statement_ids = ["doc_jan_report_pdf", "doc_feb_report_pdf", "doc_mar_report_pdf"]
+# were obtained from previous agent.upload_document calls.
+
+try:
+    tasks = [
+        {
+            "instructions": f"Access the January bank statement (ID: {statement_ids[0]}). Extract the values for 'Total Deposits' and 'Total Withdrawals'. Record these numbers.",
+            # target_url is likely not needed as the agent interacts with the document directly.
+        },
+        {
+            "instructions": f"Access the February bank statement (ID: {statement_ids[1]}). Extract the 'Total Deposits' and 'Total Withdrawals'. Record these numbers.",
+        },
+         {
+            "instructions": f"Access the March bank statement (ID: {statement_ids[2]}). Extract the 'Total Deposits' and 'Total Withdrawals'. Record these numbers.",
+        },
+        {
+            "instructions": "Create a summary of the recorded deposits and withdrawals for the first quarter (January, February, March).",
+            # Optional target_url could point to a specific spreadsheet or internal reporting tool.
+            # target_url="https://docs.google.com/spreadsheets/d/YOUR_SUMMARY_SHEET_ID"
+        }
+    ]
+    workflow_def = agent.create_workflow(name="Quarterly Financial Summary Extraction", tasks=tasks)
+    if workflow_def:
+        print(f"Financial summary workflow created: {workflow_def.get('workflow_id')}")
+
+    # You would then typically start this workflow using agent.start_workflow_run(...)
+
+except Exception as e:
+    print(f"Error creating financial workflow: {e}")
+```
+**Value:** Automates the extraction of specific data points from multiple structured or semi-structured documents, saving significant manual effort in data entry and aggregation.
+
+---
+
+This pattern allows for powerful and flexible automations where the agent's actions are dynamically informed by the content of specific, pre-existing files identified by their `document_id`.

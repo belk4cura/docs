@@ -45,7 +45,15 @@ except Exception as e:
 
 ```
 
-The `create_workflow` method requires a `name` for the workflow and a list of `tasks`. Each item in the `tasks` list defines a step and **must contain either** an `instructions` string (with an optional `target_url`) **or** the `task_id` of a pre-defined task (like one generated from video). You cannot provide both for the same step.
+The `create_workflow` method requires a `name` for the workflow and a list of `tasks`. Each item in the `tasks` list defines a step and **must contain either**:
+*   An `instructions` string (which guides the agent's actions for that step). This may optionally be paired with a `target_url` (string or list of strings) to specify an exact starting page(s) for the step.
+*   OR the `task_id` of a pre-defined task (like one generated from video).
+
+You cannot provide both `instructions` and `task_id` for the same step.
+
+The `target_url` within a task step definition is **optional**. If provided, it specifies the starting page(s) for that specific step. If omitted for a step, the agent will begin that step based on the context from the previous step or navigate based purely on the `instructions` provided for the current step.
+
+*For more details on using `target_url` (including multiple URLs) versus instruction-based navigation within steps, see [Advanced SDK Patterns: Using target_url](./advanced-sdk-patterns.md#using-targeturl-for-initial-context-optional).*
 
 **Example using `task_id`:**
 

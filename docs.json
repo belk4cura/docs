@@ -81,6 +81,7 @@
                   "developer/workflows",
                   "developer/video-to-task",
                   "developer/documents",
+                  "developer/using-documents-in-automation",
                   "developer/advanced-sdk-patterns"
                 ]
               }
