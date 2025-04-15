@@ -3,18 +3,18 @@ title: Creating Tasks from Video
 sidebar_title: Tasks from Video
 ---
 
-This guide explains how to use the Python SDK to upload a video for automatic task/workflow generation and check the processing status.
+This guide explains how to use the Python SDK to upload a video for automatic task generation and check the processing status.
 
 **Prerequisites:** Before using the methods described here, ensure you have:
 1.  Followed the [Python SDK Setup](./sdk-setup.md) guide for installation and initialization.
 2.  Obtained your credentials as described in [Managing API Keys](./managing-api-keys.md).
 3.  Successfully initialized the `agent` object as shown in the SDK Setup guide.
 
-This feature allows you to generate a task or workflow definition by providing a video recording of the desired actions. The processing happens asynchronously.
+This feature allows you to generate a task definition by providing a video recording of the desired actions. The processing happens asynchronously.
 
-## Uploading Video for Task/Workflow Generation
+## Uploading Video for Task Generation
 
-Upload a video file and associate it with an end-user to start the generation process.
+Upload a video file and associate it with an end-user to start the task generation process.
 
 ```python
 import os
@@ -33,7 +33,7 @@ try:
     job_details = agent.create_task_from_video( # Updated method name
         developer_user_id=user_id, # Required: Your internal ID for the end-user
         file_path=video_file_path, # Required: Path to the video file
-        workflow_name=optional_task_name # Optional: Name for the generated task/workflow
+        task_name=optional_task_name # Optional: Name for the generated task
     )
 
     if job_details:
@@ -50,11 +50,11 @@ except Exception as e:
 
 ```
 
-The `create_task_from_video` method requires the `developer_user_id` and the `file_path` to the video. It's assumed the SDK handles reading the file content from the provided path. You can also provide an optional `workflow_name` (or similar parameter) for the generated automation. On success, it returns a dictionary containing the `job_id` for this processing task and its initial `status` (usually 'queued').
+The `create_task_from_video` method requires the `developer_user_id` and the `file_path` to the video. It's assumed the SDK handles reading the file content from the provided path. You can also provide an optional `task_name` for the generated task. On success, it returns a dictionary containing the `job_id` for this processing task and its initial `status` (usually 'queued').
 
 ## Checking Processing Job Status (Polling)
 
-Monitor the status of the asynchronous video processing job using the `job_id`.
+Monitor the status of the asynchronous video-to-task generation job using the `job_id`.
 
 ```python
 import time
@@ -75,9 +75,9 @@ if job_id_to_check:
 
             if status == 'completed':
                 print("Video processing completed.")
-                generated_workflow_id = status_info.get('workflow_id')
-                print(f"Generated Workflow ID: {generated_workflow_id}")
-                # You can now use this workflow_id to start runs
+                generated_task_id = status_info.get('task_id') # Updated field name
+                print(f"Generated Task ID: {generated_task_id}")
+                # You can now use this task_id
                 break
             elif status == 'failed':
                 print("Video processing failed.")
@@ -99,4 +99,4 @@ else:
 
 ```
 
-The `get_task_processing_job_status` method requires the `job_id`. It returns a dictionary containing the job's current `status`. If completed, it includes the `workflow_id` of the generated workflow definition (based on current API spec). If failed, it includes an `error` message. It may also contain timestamps. Returns `None` on error.
+The `get_task_processing_job_status` method requires the `job_id`. It returns a dictionary containing the job's current `status`. If completed, it includes the `task_id` of the generated task definition. If failed, it includes an `error` message. It may also contain timestamps. Returns `None` on error.

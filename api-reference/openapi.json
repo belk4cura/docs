@@ -176,8 +176,8 @@
     "/tasks/from-video": {
       "post": {
         "tags": ["Tasks"],
-        "summary": "Create Task/Workflow Definition from Video",
-        "description": "Upload a video file to automatically generate a workflow definition based on the observed actions. This is an asynchronous process. Returns a job ID for polling the status.",
+        "summary": "Create Task from Video",
+        "description": "Upload a video file to automatically generate a single task definition based on the observed actions. This is an asynchronous process. Returns a job ID for polling the status.",
         "operationId": "createTaskFromVideo",
         "requestBody": {
           "required": true,
@@ -194,12 +194,12 @@
                   },
                   "developer_user_id": {
                     "type": "string",
-                    "description": "Identifier for the end-user this workflow belongs to.",
+                    "description": "Identifier for the end-user this task belongs to.",
                      "example": "user-unique-id-in-your-system"
                   },
-                  "workflow_name": {
+                  "task_name": {
                     "type": "string",
-                    "description": "Optional user-friendly name for the generated workflow.",
+                    "description": "Optional user-friendly name for the generated task.",
                     "example": "Task from MyScreenRecording.mp4"
                   }
                 }
@@ -456,17 +456,22 @@
       },
       "WorkflowTask": {
         "type": "object",
-        "required": ["instructions"],
+        "description": "A single step within a workflow. Define the step using either 'instructions' or 'task_id'.",
         "properties": {
           "instructions": {
             "type": "string",
-            "description": "Natural language instruction for this step.",
+            "description": "Natural language instruction for this step. Required if 'task_id' is not provided.",
             "example": "Navigate to google.com and search for 'best AI assistants'."
           },
           "target_url": {
             "type": "string",
-            "description": "Optional initial URL context for this step.",
+            "description": "Optional initial URL context for this step (only applicable when using 'instructions').",
             "example": "https://google.com"
+          },
+          "task_id": {
+            "type": "string",
+            "description": "ID of a pre-defined task to execute for this step. Required if 'instructions' are not provided.",
+            "example": "tsk_abc123xyz789"
           }
         }
       },
@@ -481,7 +486,7 @@
           },
           "tasks": {
             "type": "array",
-            "description": "An ordered sequence of tasks to execute.",
+            "description": "An ordered sequence of tasks to execute. Each item must contain either 'instructions' or 'task_id'.",
             "items": { "$ref": "#/components/schemas/WorkflowTask" },
             "minItems": 1
           }
@@ -636,11 +641,11 @@
               "enum": ["queued", "processing", "completed", "failed"],
               "example": "processing"
             },
-            "workflow_id": {
+            "task_id": {
               "type": "string",
               "nullable": true,
-              "description": "Identifier of the workflow definition created if status is 'completed'.",
-              "example": "wf_xyz789abc123"
+              "description": "Identifier of the task definition created from the video if status is 'completed'.",
+              "example": "tsk_xyz789abc123"
             },
             "error": {
               "type": "string",

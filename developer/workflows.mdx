@@ -45,7 +45,36 @@ except Exception as e:
 
 ```
 
-The `create_workflow` method requires a `name` for the workflow and a list of `tasks`. Each task is a dictionary containing at least the `instructions` string. It can optionally include a `target_url`. On success, it returns a dictionary containing the details of the created workflow, including its unique `workflow_id`.
+The `create_workflow` method requires a `name` for the workflow and a list of `tasks`. Each item in the `tasks` list defines a step and **must contain either** an `instructions` string (with an optional `target_url`) **or** the `task_id` of a pre-defined task (like one generated from video). You cannot provide both for the same step.
+
+**Example using `task_id`:**
+
+```python
+# Assume task_id_from_video was obtained from the video processing job
+task_id_from_video = "tsk_xyz789abc123" 
+standard_logout_task_id = "tsk_logout_task_def" # Assumes a predefined task for logging out
+
+workflow_tasks_mixed = [
+    {"task_id": task_id_from_video}, # Step 1: Run the task generated from video
+    {"instructions": "Summarize the result obtained in the previous step and send it as an email."}, # Step 2: Use instructions
+    {"task_id": standard_logout_task_id} # Step 3: Run a standard logout task
+]
+
+try:
+    workflow_def_mixed = agent.create_workflow(
+        name="Process Video Task and Summarize", 
+        tasks=workflow_tasks_mixed 
+    )
+    if workflow_def_mixed:
+        print(f"Workflow using task_id created: {workflow_def_mixed.get('workflow_id')}")
+    else:
+        print("Failed to create mixed workflow.")
+except Exception as e:
+    print(f"Error: {e}")
+
+```
+
+On success, `create_workflow` returns a dictionary containing the details of the created workflow, including its unique `workflow_id`.
 
 ## Starting a Workflow Run
 
