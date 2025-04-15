@@ -142,7 +142,7 @@
     "primary": {
       "type": "button",
       "label": "Dashboard",
-      "href": "https://curalabs.io/dashboard/credits"
+      "href": "https://curalabs.io/dashboard/settings?tab=billing"
     }
   },
   "footer": {
