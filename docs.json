@@ -18,7 +18,13 @@
             "group": "Get Started",
             "pages": [
               "introduction",
-              "quickstart"
+              {
+                "group": "Quickstart",
+                "pages": [
+                  "quickstart/overview",
+                  "quickstart/agent-quickstart"
+                ]
+              }
             ]
           },
           {
@@ -145,6 +151,9 @@
       "label": "Dashboard",
       "href": "https://curalabs.io/dashboard/settings?tab=billing"
     }
+  },
+  "appearance": {
+    "default": "light"
   },
   "footer": {
     "socials": {
