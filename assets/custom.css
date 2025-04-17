@@ -58,3 +58,10 @@ a[href="/"]::after {
 .dark .free-credits-text strong {
   color: #90EE90; /* Light Green for dark mode */
 }
+
+/* Style for smaller image within a framed step */
+.small-step-frame img {
+  width: 300px; /* Adjust this pixel value as needed */
+  display: block; 
+  margin: auto; 
+}
