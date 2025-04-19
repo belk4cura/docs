@@ -3,9 +3,7 @@ title: Complex Workflows
 sidebar_title: Complex Workflows
 ---
 
-The real power of Cura shines when you combine different types of automation into a "Complex Workflow." Think of it like creating a multi-step checklist for Cura to follow, where each step might be a different kind of task we've already discussed.
-
-Instead of just performing one action, Cura can execute a sequence: maybe start by reading a document, then log into a website, enter some data, check another website, and finally send a notification. This allows you to automate entire processes from start to finish. These are typically set up and managed using the [Workflow](/platform/using-workflows) features of the platform.
+"Complex Workflows" combine different automation types into multi-step sequences, managed via the [Workflow](/platform/using-workflows) features. Cura executes these sequences (e.g., read doc, login, enter data, check site, notify) to automate entire processes, rather than just single actions.
 
 **Key Characteristics:**
 
@@ -50,11 +48,3 @@ Let's illustrate with an end-to-end sales order processing example:
         *   *Action:* Cura sends a confirmation email.
 
 *   **Outcome:** This workflow automates the entire process from receiving a PO document to having a draft sales order ready in the CRM, requiring manual intervention only if issues arise (like insufficient stock). It combines document reading, multi-site interaction, data entry, and notifications.
-
----
-
-### Distinction from Other Use Cases
-
-Complex Workflows are not a *new* type of action but rather the **orchestration of multiple other use cases** into a cohesive process.
-
-*   It uses capabilities like `Simple Tasks`, `Complex Data Entry`, `From Document`, `Multi-Site Interactions`, etc., as building blocks within a sequence defined by a [Workflow](/platform/using-workflows).
