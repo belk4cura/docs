@@ -1,10 +1,56 @@
 ---
-title: Multi-site Interactions
-sidebar_title: Multi-site Interactions
+title: Multi-Site Interactions
+sidebar_title: Multi-Site Interactions
 ---
 
-# Use Case: Multi-site Interactions
+Many online tasks require jumping between different websites or web applications. "Multi-Site Interactions" describes how Cura can seamlessly navigate and perform actions across multiple distinct sites as part of a single, unified automation.
 
-This page describes how Curalabs can automate scenarios involving interactions across different websites, such as transferring data between applications or comparing information from multiple sources.
+Instead of you having to manually copy information from one site and paste it into another, or check statuses across different systems one by one, you can instruct Cura to handle the entire process. This could involve comparing information, transferring data, or performing sequential actions across different web platforms.
 
-*(Content to be added)*
+**Key Characteristics:**
+
+*   **Cross-Website Navigation:** Cura moves between different websites (e.g., from your email to a CRM, from an e-commerce site to a shipping tracker) as needed by the task.
+*   **Data Transfer:** Information found or copied on one site can be used or entered on another site within the same automation.
+*   **Simultaneous Access (Optional):** Cura can open multiple websites in different tabs at the beginning of a task, allowing for direct comparison or parallel information gathering.
+*   **Sequential Actions:** Performing a step on Site A, then using the result to perform the next step on Site B. This is often managed using [Workflows](/platform/using-workflows).
+
+**When to Use Cura for Multi-Site Interactions:**
+
+This capability is powerful for tasks like:
+
+*   Comparing prices or product details across multiple e-commerce sites.
+*   Checking the status of an order across the store website, the shipping carrier's site, and potentially a payment gateway.
+*   Transferring customer information from an inquiry form or email into your CRM system.
+*   Consolidating data from different dashboards or reporting tools into one place (though Cura gathers the data; see [Report Generation](/use-cases/report-generation) for creating the final report).
+*   Managing bookings that involve coordinating across airline, hotel, and car rental websites.
+
+---
+
+### Examples of Multi-Site Interactions (Conceptual)
+
+Here’s how Cura handles working across different websites:
+
+1.  **Cross-Platform Order Status Check:**
+    *   *Goal:* Get a complete status update for a customer order.
+    *   *Instruction:* "Open the order details page for Order #5678 on `[Our Store URL]`, the tracking page for shipping ID `[Tracking Number]` on `[Shipping Carrier URL]`, and the transaction record on `[Payment Gateway URL]`. Report the order status, latest shipping update, and payment confirmation status."
+    *   *Action:* Cura opens all three specified pages, potentially in separate tabs, extracts the requested status from each distinct site, and provides a consolidated summary.
+
+2.  **Data Transfer from Email to CRM:**
+    *   *Goal:* Update a customer record in the CRM with new information from an email.
+    *   *Instruction:* "Find the email from 'support@customer.com' with the subject 'Updated Contact Info'. Copy the new phone number. Then, go to `[CRM URL]`, search for the contact 'Jane Doe', open her record, go to the contact details section, and paste the new phone number into the 'Mobile Phone' field."
+    *   *Action:* Cura navigates from the email client to the CRM, performing the copy-paste operation across the two different web applications as part of a workflow.
+
+3.  **Price Comparison Across Vendors:**
+    *   *Goal:* Find the best price for a specific component from approved vendor websites.
+    *   *Instruction:* "Open the product page for 'Part #XYZ-100' on `[Vendor A URL]`, `[Vendor B URL]`, and `[Vendor C URL]`. Find the price listed on each page and report which vendor has the lowest price."
+    *   *Action:* Cura opens all three vendor pages simultaneously, extracts the price from each, and reports the comparison result.
+
+These examples demonstrate Cura's ability to orchestrate tasks that span multiple web domains, streamlining processes that would otherwise require significant manual effort and context switching.
+
+---
+
+### Distinction from Other Use Cases
+
+*   **Simple Tasks:** While a Simple Task might involve visiting *a* site, Multi-Site Interactions inherently involve working across *multiple different* sites or web applications.
+*   **Complex Data Entry:** Multi-Site Interaction often *includes* data entry (pasting data found on Site A into Site B), but its defining characteristic is the cross-website navigation and action coordination. See [Complex Data Entry](/use-cases/data-entry).
+*   **Deep Research:** Deep Research may involve visiting multiple sites, but its focus is on exploration and information synthesis, whereas Multi-Site Interaction is typically about performing specific actions or data transfers between known or specified sites. See [Deep Research](/use-cases/deep-research).

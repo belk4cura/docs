@@ -3,8 +3,47 @@ title: Complex Data Entry
 sidebar_title: Complex Data Entry
 ---
 
-# Use Case: Complex Data Entry
+Sometimes, getting information into online forms and systems is more involved than just filling out a few fields. "Complex Data Entry" refers to situations where Cura needs to handle multi-step processes, navigate across different pages or sections of a form, or even use information from documents you provide.
 
-This page describes how Curalabs can automate complex data entry tasks, potentially spanning multiple pages or forms.
+This goes beyond the scope of [Simple Tasks](/use-cases/simple-tasks), which are designed for single, focused objectives. Complex Data Entry often involves Cura acting more like a diligent assistant, carefully working through longer forms or transferring information from one place to another.
 
-*(Content to be added)*
+**Key Characteristics:**
+
+*   **Multi-Page Forms:** Filling out applications, onboarding questionnaires, or detailed profiles that span multiple screens or sections.
+*   **Data Transfer:** Copying information from one source (like an email, spreadsheet, or an uploaded document) and pasting it into specific fields in another system.
+*   **Using Documents:** Leveraging information directly from files you've uploaded (like PDFs or Word documents) to fill out forms – think resumes for job applications!
+*   **Sequential Steps:** Often requires completing actions in a specific order, which might be set up as a [Workflow](/platform/using-workflows) behind the scenes for consistency.
+
+**When to Use Cura for Complex Data Entry:**
+
+Cura excels at automating repetitive and time-consuming data entry tasks like:
+
+*   Filling out online job applications using your resume.
+*   Entering new customer details into a CRM from an email or spreadsheet.
+*   Completing multi-stage onboarding forms for new services or accounts.
+*   Populating fields in internal databases or systems from external sources.
+*   Transferring data between different web applications that don't automatically connect.
+
+---
+
+### Examples of Complex Data Entry (Conceptual)
+
+Here’s how Cura can handle these more involved tasks:
+
+1.  **Job Application using a Resume:**
+    *   *Goal:* Fill out an online job application form.
+    *   *Setup:* You upload your resume (PDF or Word doc) to Cura.
+    *   *Instruction:* "Go to the job posting at `[Job Application URL]` and fill out the application using the information from my uploaded resume `[Your Resume Filename]`."
+    *   *Action:* Cura navigates the application form, identifies fields like "Work Experience," "Education," etc., extracts the relevant details from your resume, and enters them into the corresponding fields across potentially multiple pages.
+
+2.  **Updating a CRM from an Email:**
+    *   *Goal:* Add a new lead's contact information into your company CRM.
+    *   *Instruction:* "Open the latest email from 'New Lead Inquiry'. Copy the contact's name, email, phone number, and company name. Then, go to `[CRM URL]`, click 'Add New Contact', and paste this information into the correct fields."
+    *   *Action:* Cura follows the steps, navigating between your email and the CRM, copying the specified data, and pasting it accurately. This might be set up as a reusable Workflow.
+
+3.  **Multi-Page Onboarding Form:**
+    *   *Goal:* Complete a new employee onboarding process online.
+    *   *Instruction:* "Go to `[Onboarding Portal URL]`. Start the new hire process. Fill in the personal details page using `[Employee Details Document]`. Complete the emergency contact page with `[Contact Info]`. Set up the direct deposit page using `[Banking Info]`."
+    *   *Action:* Cura methodically works through each page or section of the onboarding portal, entering the required information as instructed, potentially pulling from provided details or documents.
+
+These examples show how Cura can tackle data entry tasks that involve multiple steps, different web pages, or external information sources like documents, saving you significant time and effort compared to manual entry.

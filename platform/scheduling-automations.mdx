@@ -1,0 +1,52 @@
+---
+title: Scheduling Automations
+sidebar_title: Scheduling Automations
+---
+
+
+Want Cura to perform tasks automatically without you having to ask each time? You can schedule your automations (both individual Tasks and multi-step Workflows) to run at specific times or regular intervals. This is incredibly useful for monitoring information, ensuring tasks run consistently, and gathering data automatically.
+
+**Why Schedule Automations?**
+
+*   **Consistency:** Ensure routine tasks (like pulling reports or checking statuses) happen reliably on schedule.
+*   **Monitoring:** Keep an eye on websites for changes (e.g., price updates, stock levels, specific content) by having Cura check regularly.
+*   **Timeliness:** Gather data or perform actions at specific times (e.g., checking sales figures first thing in the morning).
+*   **Efficiency:** Run tasks during off-hours or automatically trigger processes based on time rather than manual initiation.
+
+**What Can Be Scheduled?**
+
+You can typically schedule any reusable Task or Workflow you have defined, including those designed for:
+
+*   **Simple data checks:** Checking a specific value on a page.
+*   **Report data gathering:** Collecting figures needed for regular reports.
+*   **Multi-site checks:** Comparing prices or checking statuses across different websites.
+*   **System updates:** Running routine data entry tasks.
+
+**How Scheduling Enables Monitoring & Alerting:**
+
+By scheduling tasks to run repeatedly, you inherently create a monitoring system. For example:
+
+*   **Price Monitoring:** Schedule a task to check a product's price on a competitor's website every day. If the task includes a step to notify you (e.g., send an email) *if* the price changes or drops below a certain threshold, you've created a price alert system.
+*   **Inventory Checks:** Schedule a workflow to check stock levels for key items across supplier websites every morning. The result of the workflow run will tell you the current levels.
+*   **Website Content Monitoring:** Schedule a task to visit a specific webpage and check if certain keywords appear or disappear, notifying you of changes.
+
+The key is combining the **scheduling feature** with a **Task or Workflow** designed to check the desired information and potentially include a notification step based on the findings.
+
+---
+
+### Examples of Scheduled Automations (Conceptual)
+
+1.  **Daily Price Check:**
+    *   *Goal:* Monitor the price of a specific item daily.
+    *   *Setup:* Create a `Simple Task` to visit a product page and extract the price. Add a step to email you if the price is below $50.
+    *   *Schedule:* Run this task every day at 8:00 AM.
+
+2.  **Weekly Report Data Collection:**
+    *   *Goal:* Gather sales data for a weekly report automatically.
+    *   *Setup:* Create a `Report Generation` workflow that logs into the sales dashboard and extracts key metrics.
+    *   *Schedule:* Run this workflow every Monday at 6:00 AM so the data is ready for the weekly meeting.
+
+3.  **Hourly Website Status Check:**
+    *   *Goal:* Ensure a critical webpage is loading correctly.
+    *   *Setup:* Create a `Simple Task` that just visits `[Your Website URL]` and checks for a specific element or text that should always be present. Include a step to notify IT via email if the check fails.
+    *   *Schedule:* Run this task every hour.

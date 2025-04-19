@@ -1,10 +1,59 @@
 ---
-title: Generating Automations from Videos
-sidebar_title: Automations from Videos
+title: Automation from Video
+sidebar_title: From Video
 ---
 
-# Use Case: Generating Automations from Videos
+Imagine showing someone how to do a task on the computer by recording your screen. Now, imagine Cura could watch that recording and learn how to do the task itself! That's the core idea behind "Automation from Video."
 
-This page describes how users can create workflows or tasks simply by uploading a video recording of the process.
+You can provide Cura with a video file (like a screen recording or an existing training video), and it will analyze the actions performed – the clicks, the typing, the navigation – and automatically create a reusable automation based on what it "saw." It's like teaching Cura a new skill simply by showing it.
 
-*(Content to be added)*
+**Key Characteristics:**
+
+*   **Learning by Watching:** Cura analyzes video recordings of browser-based tasks to understand the sequence of actions.
+*   **Automatic Task Creation:** Generates a ready-to-use automation (a "Task") directly from the video content. No need to manually write out step-by-step instructions.
+*   **Leverages Existing Resources:** Perfect for turning existing screen recordings or standard operating procedure (SOP) training videos into live automations.
+*   **Handles Browser Actions:** Works best for tasks performed within a web browser that are clearly demonstrated in the video.
+
+**When to Use Automation from Video:**
+
+This is incredibly useful for quickly automating established processes, especially when:
+
+*   You already have training videos demonstrating how to perform tasks in web-based software (e.g., HR systems, CRMs, finance tools).
+*   You want to quickly create an automation for a process you can easily record yourself doing.
+*   You need to standardize repetitive tasks based on visual best practices shown in a video.
+*   Onboarding new team members by quickly automating the standard procedures they need to learn.
+
+---
+
+### Examples of Automation from Video (Conceptual)
+
+Here are some valuable ways businesses can use this feature:
+
+1.  **Automating HR Processes from Training Videos:**
+    *   *Goal:* Automate the process of submitting a weekly timesheet.
+    *   *Input:* Provide Cura with the company's training video that shows employees how to log into the HR portal, navigate to the timesheet section, fill it out, and submit it.
+    *   *Action:* Cura analyzes the video and creates an automation. Now, employees (or Cura on their behalf) can trigger this automation to complete their timesheets by simply running the learned task, potentially just needing to confirm the hours.
+
+2.  **Learning Customer Support Procedures:**
+    *   *Goal:* Automate the steps to look up a customer's order status in the support system.
+    *   *Input:* Upload a screen recording where a support agent demonstrates logging into the support tool, searching for a customer, navigating to their order history, and identifying the latest order status.
+    *   *Action:* Cura learns this sequence. A support agent can later ask Cura, "Check the status for Order #12345," and Cura can execute the learned task to find and report the information.
+
+3.  **Standardizing Financial Reporting Steps:**
+    *   *Goal:* Automate the process of pulling a specific monthly report from an online accounting tool.
+    *   *Input:* Give Cura a video showing the steps: log in, navigate to 'Reports', select 'Monthly P&L', set the date range, and export the report.
+    *   *Action:* Cura creates an automation for this reporting task. This ensures the report is pulled consistently each month using the exact steps shown in the approved procedure video.
+
+4.  **Creating Tasks from Ad-Hoc Recordings:**
+    *   *Goal:* Quickly automate a repetitive data lookup task you just figured out.
+    *   *Input:* Record your own screen as you perform the task (e.g., checking inventory levels for a specific product across three supplier websites). Upload the recording.
+    *   *Action:* Cura learns the multi-site process you demonstrated and creates an automation you can reuse immediately, without needing to write detailed instructions.
+
+These examples show the power of turning visual demonstrations directly into functional automations, significantly speeding up the process of getting Cura to perform complex, established procedures.
+
+---
+
+### Distinction from Other Use Cases
+
+*   **Instruction-Based Tasks (Simple, Data Entry, etc.):** Most other use cases involve giving Cura *written* or *spoken* instructions. Automation from Video is unique because Cura *learns from watching a visual demonstration*.
+*   **Workflows:** While a task learned from a video *can be included as a step* within a larger [Workflow](/platform/using-workflows), the initial creation method (learning from video) is distinct.

@@ -3,8 +3,62 @@ title: Simple Tasks
 sidebar_title: Simple Tasks
 ---
 
-# Use Case: Simple Tasks
+Simple Tasks are the most basic type of automation you can ask Cura to perform. They are perfect for handling **focused, self-contained jobs** that you can describe in a single instruction set.
 
-This page describes how Curalabs can be used to automate basic, single-shot tasks.
+Think of telling the agent: "Do this one specific thing." Even if that requires visiting a web page or two, the overall goal is straightforward and doesn't need to be broken down into multiple complicated steps.
 
-*(Content to be added)*
+**Key Characteristics:**
+
+*   **Single Goal:** Aims to achieve one primary objective (e.g., log in, find a specific piece of information, do a quick search, check a status).
+*   **Single Instruction Set:** You give the agent all the directions for the job at once.
+*   **Direct Action:** The agent follows your instructions from start to finish for that specific task.
+
+**When to Use Simple Tasks:**
+
+Simple Tasks are great for common, everyday web actions like:
+
+*   Logging you into websites or online tools.
+*   Navigating to a specific page to retrieve a well-defined piece of information (like a price, status, or account balance).
+*   Doing basic web searches and pulling out simple results (like page titles).
+*   Filling out very short, simple forms.
+*   Checking the status of something (like an order) on a single page.
+*   Comparing straightforward information (like prices) across a *pre-defined* list of specific pages opened simultaneously.
+
+---
+
+### Examples of Simple Tasks (Conceptual)
+
+Here are some scenarios best suited for Simple Tasks:
+
+1.  **Website Login:**
+    *   *Goal:* Get logged into your company's CRM.
+    *   *Instruction:* "Log me into `https://app.mycrm.com` with username 'alex.chen' and my saved password, then go to the main dashboard."
+
+2.  **Quick Web Search:**
+    *   *Goal:* Find recent news headlines.
+    *   *Instruction:* "Search Google News for 'latest space exploration news' and tell me the titles of the first three articles."
+
+3.  **Finding Specific Info:**
+    *   *Goal:* Check a stock price.
+    *   *Instruction:* "Go to `https://finance.example.com/quote/XYZ` and tell me the current stock price."
+
+4.  **Checking a Status:**
+    *   *Goal:* See where your online order is.
+    *   *Instruction:* "Go to `https://shippingtracker.com/track`, enter tracking ID 'ABC123XYZ', and tell me the latest shipping status."
+
+5.  **Comparing Prices (Specific Pages):**
+    *   *Goal:* Compare a product's price on two specific websites.
+    *   *Instruction:* "Open `https://competitorA.com/product/widget` and `https://competitorB.com/widget`. Find the price for the 'Super Widget' on both pages and tell me what they are."
+
+These examples show how Simple Tasks help automate common, specific actions quickly and easily.
+
+---
+
+### Distinction from Other Use Cases
+
+Simple Tasks differ from more complex scenarios handled by other Curalabs capabilities:
+
+*   **Complex Data Entry:** Simple tasks usually involve minimal typing or form filling. For filling out long forms, applications, or processes that need validation, see [Complex Data Entry](/use-cases/data-entry).
+*   **Deep Research:** Simple Tasks grab specific facts you ask for. They don't browse broadly, piece together information from many places, or write summaries. For more in-depth research, see [Deep Research](/use-cases/deep-research).
+*   **Report Generation:** A Simple Task might find a number for a report, but it won't create the whole report. See [Report Generation](/use-cases/report-generation).
+*   **Multi-Step Workflows:** Simple Tasks are one-off jobs. If your process has several distinct stages, needs decisions made along the way, or involves moving information between different sites or systems, you'd use a [Workflow](/platform/using-workflows).

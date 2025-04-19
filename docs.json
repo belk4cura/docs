@@ -36,6 +36,8 @@
                   "use-cases/multi-site",
                   "use-cases/report-generation",
                   "use-cases/from-video",
+                  "use-cases/from-document",
+                  "use-cases/complex-workflows",
               {
                 "group": "Industry Examples",
                 "pages": [
@@ -65,12 +67,13 @@
             "pages": [
               "platform/overview",
               "platform/doing-tasks",
+              "platform/scheduling-automations",
+              "platform/activity",
+              "platform/credits",
               "platform/doing-tasks-from-videos",
               "platform/using-workflows",
               "platform/uploading-documents",
               "platform/managing-workspace",
-              "platform/activity",
-              "platform/credits",
               "platform/security"
             ]
           },

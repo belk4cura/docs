@@ -1,0 +1,66 @@
+---
+title: Automation from Document
+sidebar_title: From Document
+---
+
+Imagine you have information trapped inside files like PDFs, Word documents, or even scanned images. Instead of manually reading through them and typing data into other systems, you can ask Cura to do it for you! "Automation from Document" describes how Cura can read and understand the content of your uploaded files to perform tasks automatically.
+
+Cura can extract specific information, use that information to fill out forms online, or even summarize key points from the document content. This turns static files into active participants in your automated workflows.
+
+**Key Characteristics:**
+
+*   **Document Comprehension:** Cura reads and interprets text within uploaded documents (PDFs, DOCX, etc.).
+*   **Data Extraction:** Pulls out specific pieces of information you need (e.g., names, dates, amounts, addresses, keywords).
+*   **Document-Driven Actions:** Uses the extracted information to perform subsequent actions, like filling web forms, updating systems, or creating summaries.
+*   **Handles Various File Types:** Works with common document formats where text is accessible.
+*   **Source of Truth:** Treats the document content as the primary source for the automation's data.
+
+**When to Use Automation from Document:**
+
+This is particularly powerful for automating tasks involving:
+
+*   Processing invoices, purchase orders, or receipts.
+*   Extracting key clauses, dates, or parties from contracts or agreements.
+*   Using resumes or CVs to pre-fill application forms (emphasizing the document reading).
+*   Summarizing reports or articles stored as documents.
+*   Migrating data from legacy documents into online systems.
+
+---
+
+### Examples of Automation from Document (Conceptual)
+
+Here’s how Cura can work directly with your files:
+
+1.  **Invoice Processing:**
+    *   *Goal:* Extract details from vendor invoices and enter them into an accounting system.
+    *   *Setup:* Upload vendor invoice PDFs to Cura.
+    *   *Instruction:* "For the invoice file `[Invoice PDF Name/ID]`, find the Vendor Name, Invoice Number, Due Date, and Total Amount. Then, go to `[Accounting System URL]`, log in, navigate to 'Enter Bills', and input this information."
+    *   *Action:* Cura reads the PDF, extracts the specified fields, and performs the data entry into the web-based accounting software.
+
+2.  **Contract Data Extraction:**
+    *   *Goal:* Find key dates and terms from uploaded service agreements.
+    *   *Instruction:* "Read the service agreement `[Contract PDF Name/ID]`. Find the 'Effective Date', the 'Term Length', and the section describing 'Payment Schedule'. Report these details."
+    *   *Action:* Cura analyzes the document content to locate and extract the specific pieces of information requested.
+
+3.  **Resume-Driven Application Filling:**
+    *   *Goal:* Fill a job application based primarily on resume content.
+    *   *Setup:* Upload a candidate's resume PDF.
+    *   *Instruction:* "Using the resume `[Resume PDF Name/ID]` as the main source, fill out the job application form at `[Application URL]`. Pay special attention to accurately transferring the Work Experience and Education sections."
+    *   *Action:* Cura reads the resume, identifies the relevant sections, and uses that content to populate the fields on the online application form.
+
+4.  **Multi-Document Data Aggregation:**
+    *   *Goal:* Consolidate sales figures from multiple monthly report PDFs.
+    *   *Setup:* Upload the PDF reports for January, February, and March.
+    *   *Instruction:* "For each of the monthly reports (`[Jan Report ID]`, `[Feb Report ID]`, `[Mar Report ID]`), extract the 'Total Sales' number. Then, calculate and report the total sales for the quarter."
+    *   *Action:* Cura reads each specified document, extracts the required figure, and performs the calculation based on the extracted data.
+
+These examples show how Cura can unlock the information within your documents and use it to automate tasks, reducing manual reading and data entry errors.
+
+---
+
+### Distinction from Other Use Cases
+
+*   **Complex Data Entry:** While often involving data entry, this use case emphasizes the *document* as the starting point and primary source of information, rather than just one possible input among others. See [Complex Data Entry](/use-cases/data-entry).
+*   **Deep Research:** Deep Research explores the vastness of the *web*; Automation from Document explores the specific content of *your uploaded files*. See [Deep Research](/use-cases/deep-research).
+*   **Report Generation:** Automation from Document might *extract* the data needed for a report, but its focus is on the document interaction. Report Generation is focused on the goal of *gathering data specifically for reporting*. See [Report Generation](/use-cases/report-generation).
+*   **Automation from Video:** The input source is fundamentally different (video vs. document). See [Automation from Video](/use-cases/from-video).

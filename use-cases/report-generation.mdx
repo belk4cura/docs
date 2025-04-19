@@ -1,10 +1,57 @@
 ---
-title: Document/Report Generation
+title: Report Generation
 sidebar_title: Report Generation
 ---
 
-# Use Case: Document/Report Generation
+Generating reports often involves gathering information scattered across different websites, dashboards, or documents before compiling it. "Report Generation," in the context of Cura, focuses on automating the **data gathering and consolidation** part of this process.
 
-This page describes how Curalabs can automate the generation of reports or documents, potentially by extracting data from websites or summarizing uploaded files.
+While Cura itself might not create the final formatted document (like a polished PDF or presentation slides), it acts as an invaluable assistant by collecting all the required data points from various online sources. This saves you the tedious work of manually finding and copying information needed for your reports.
 
-*(Content to be added)*
+**Key Characteristics:**
+
+*   **Automated Data Collection:** Cura navigates specified websites or sources to find and extract the specific data points needed for a report.
+*   **Multi-Source Gathering:** Can pull information from various places like web pages, internal dashboards (if accessible via browser), or even uploaded documents.
+*   **Data Consolidation:** Presents the gathered information in a structured way (e.g., as a list, text summary, or potentially extracted values) that you can then easily use in your actual report document.
+*   **Scheduled Runs (Potential):** Can be set up (often via Workflows) to gather report data regularly (e.g., weekly sales numbers, daily social media mentions).
+
+**When to Use Cura for Report Generation:**
+
+Leverage Cura to streamline the data collection phase for reports like:
+
+*   Compiling weekly sales figures from different product dashboards.
+*   Gathering monthly competitor pricing information from their websites.
+*   Collecting key performance indicators (KPIs) from various internal web-based tools.
+*   Aggregating customer feedback or mentions from specific online sources.
+*   Pulling together data for financial summaries from online banking or investment portals.
+
+---
+
+### Examples of Report Generation Support (Conceptual)
+
+Here’s how Cura can help gather data for your reports:
+
+1.  **Weekly Sales Data Collection:**
+    *   *Goal:* Gather key sales metrics for a weekly report.
+    *   *Instruction:* "Go to the Sales Dashboard URL, log in, navigate to the 'Weekly Summary' section, and extract the 'Total Revenue', 'New Customers', and 'Top Selling Product' for the past week."
+    *   *Action:* Cura logs in, finds the specified data points on the dashboard, and provides them to you, ready to be plugged into your report template.
+
+2.  **Competitor Price Monitoring Report:**
+    *   *Goal:* Collect current prices for specific competitor products for a monthly report.
+    *   *Instruction:* "Visit the product pages for 'Widget Pro' on Competitor A's site, Competitor B's site, and Competitor C's site. Extract the current price from each page." (This could be a recurring task).
+    *   *Action:* Cura performs the [Multi-Site Interaction](/use-cases/multi-site) to gather the prices, presenting them in a list for easy inclusion in your pricing analysis report.
+
+3.  **KPI Aggregation:**
+    *   *Goal:* Collect website traffic and lead generation numbers for a marketing report.
+    *   *Instruction:* "Log into the Analytics Dashboard, find the 'Unique Visitors' for the last 7 days. Then, log into the CRM Dashboard, find the 'New Leads Created' for the last 7 days. Report both numbers."
+    *   *Action:* Cura navigates both dashboards, extracts the specific KPIs, and provides the consolidated figures.
+
+These examples highlight how Cura automates the often time-consuming data retrieval step, allowing you to focus on analyzing the information and creating the final report presentation.
+
+---
+
+### Distinction from Other Use Cases
+
+*   **Simple Tasks:** Report Generation involves gathering multiple, often related, data points, whereas Simple Tasks usually focus on a single action or piece of data.
+*   **Complex Data Entry:** Report Generation is about *extracting* data, while Complex Data Entry is about *inputting* data into forms. See [Complex Data Entry](/use-cases/data-entry).
+*   **Deep Research:** While both gather information, Deep Research is often more exploratory and aims to understand a topic broadly, whereas Report Generation focuses on collecting specific, predefined data points needed for a structured report. See [Deep Research](/use-cases/deep-research).
+*   **Multi-Site Interactions:** Report Generation frequently *uses* Multi-Site Interactions to gather data from different sources, but its end goal is the collection of data *for reporting purposes*. See [Multi-Site Interactions](/use-cases/multi-site).

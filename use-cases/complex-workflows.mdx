@@ -1,0 +1,60 @@
+---
+title: Complex Workflows
+sidebar_title: Complex Workflows
+---
+
+The real power of Cura shines when you combine different types of automation into a "Complex Workflow." Think of it like creating a multi-step checklist for Cura to follow, where each step might be a different kind of task we've already discussed.
+
+Instead of just performing one action, Cura can execute a sequence: maybe start by reading a document, then log into a website, enter some data, check another website, and finally send a notification. This allows you to automate entire processes from start to finish. These are typically set up and managed using the [Workflow](/platform/using-workflows) features of the platform.
+
+**Key Characteristics:**
+
+*   **Multi-Step Processes:** Chains together several distinct actions or tasks in a defined order.
+*   **Combines Capabilities:** Mixes and matches different use cases (like reading documents, entering data, interacting across sites) within a single automation.
+*   **End-to-End Automation:** Can handle complete business processes rather than just isolated steps.
+*   **Conditional Logic (Potential):** Advanced workflows might even involve making decisions based on information found in earlier steps (though we'll keep the examples conceptual here).
+*   **Orchestration:** Cura manages the flow, context, and data handoffs between the different steps.
+
+**When to Use Complex Workflows:**
+
+Leverage Complex Workflows when you need to automate processes that:
+
+*   Involve multiple distinct stages or decision points.
+*   Require interaction with several different web applications or data sources (documents, websites).
+*   Follow a standard operating procedure with sequential steps.
+*   Need to pass information gathered in one step to a subsequent step.
+
+---
+
+### Example of a Complex Workflow (Conceptual)
+
+Let's illustrate with an end-to-end sales order processing example:
+
+*   **Goal:** Process an incoming purchase order (PO) PDF attached to an email, check inventory, and create a draft sales order in the CRM.
+
+*   **Workflow Steps:**
+
+    1.  **Monitor & Trigger:** (Assumes an initial trigger, like receiving an email)
+    2.  **Extract PO Details (`From Document`):**
+        *   *Instruction:* "Read the attached purchase order PDF `[PO PDF ID]`. Extract the Customer Name, PO Number, Item Code(s), and Quantity for each item."
+        *   *Action:* Cura reads the PDF and extracts the key data.
+    3.  **Check Inventory (`Multi-Site Interaction` / `Simple Task`):**
+        *   *Instruction:* "Log into the Inventory Management System at `[Inventory System URL]`. For each Item Code extracted from the PO, check the 'Available Stock' quantity."
+        *   *Action:* Cura logs in and performs the stock lookups.
+    4.  **Decision Point (Conceptual):** (The workflow engine might check if stock is sufficient based on Step 3's findings). Let's assume stock is sufficient.
+    5.  **Create Draft Order in CRM (`Complex Data Entry` / `Multi-Site Interaction`):**
+        *   *Instruction:* "Log into the CRM at `[CRM URL]`. Create a new Sales Order. Enter the Customer Name and PO Number from the PO document. Add line items for each Item Code and Quantity from the PO, confirming stock was available."
+        *   *Action:* Cura logs into the CRM and fills out the sales order form using data from Step 2 and confirmation from Step 3.
+    6.  **Notification (`Simple Task` / `Reporting` aspect):**
+        *   *Instruction:* "Send an email to 'sales-team@example.com' confirming that Sales Order draft for PO Number `[PO Number]` has been created in the CRM."
+        *   *Action:* Cura sends a confirmation email.
+
+*   **Outcome:** This workflow automates the entire process from receiving a PO document to having a draft sales order ready in the CRM, requiring manual intervention only if issues arise (like insufficient stock). It combines document reading, multi-site interaction, data entry, and notifications.
+
+---
+
+### Distinction from Other Use Cases
+
+Complex Workflows are not a *new* type of action but rather the **orchestration of multiple other use cases** into a cohesive process.
+
+*   It uses capabilities like `Simple Tasks`, `Complex Data Entry`, `From Document`, `Multi-Site Interactions`, etc., as building blocks within a sequence defined by a [Workflow](/platform/using-workflows).
