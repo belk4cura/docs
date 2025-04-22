@@ -62,6 +62,34 @@ a[href="/"]::after {
 /* Style for smaller image within a framed step */
 .small-step-frame img {
   width: 300px; /* Adjust this pixel value as needed */
-  display: block; 
-  margin: auto; 
+  display: block;
+  margin: auto;
 }
+
+/* --- Force Sticky Navbar by Overriding Parent Overflow --- */
+
+/* Ensure potential ancestors allow sticky positioning */
+/* Common culprits: body, React root divs, main layout wrappers */
+body, html, #__next, #root, .mintlify-layout /* Add other potential wrappers if known */ {
+  /* Override hidden/scroll/auto that break sticky */
+  overflow: visible !important;
+  /* Sometimes 'clip' is used, try overriding that too if 'visible' alone doesn't work */
+  /* overflow-clip-margin: unset !important; */
+}
+
+/* Target the main navigation bar */
+#navbar {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  width: 100%;
+  background-color: var(--bg-default); /* Ensure background covers content */
+  border-bottom: 1px solid var(--border-color); /* Optional separation */
+}
+
+/* --- End Force Sticky Navbar --- */
+
+/* Rules for padding/sidebar will be added back later if stickiness works */
+/* main { padding-top: 60px; } */
+/* #sidebar { ... } */
+/* #content-area { ... } */
